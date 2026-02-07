@@ -28,7 +28,7 @@ import tools.jackson.databind.annotation.JsonSerialize
  * @property length The length of the SDI recipient code.
  * @throws MalformedInputException If the SDI recipient code does not meet the required format or pattern.
  * @constructor Creates an SDIRecipientCode from the given string after validation.
- * @since 2026-02
+ * @since 2026-02.1
  * @author Tommaso Pastorelli
  */
 @JvmInline
@@ -46,7 +46,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      * The length will always be 6 or 7, as per the validation rules for SDI recipient codes.
      *
      * @return The length of the SDI recipient code.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     override val length: Int
         get() = value.length
@@ -60,7 +60,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      * Used to differentiate between public administration and private recipient codes based on
      * their length.
      *
-     * @since 2026-02
+     * @since 2026-02.1
      */
     val isPA
         get() = value.length == 6
@@ -69,7 +69,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      * A recipient code is considered private if its length is exactly 7 characters.
      *
      * @return `true` if the code represents a private recipient, `false` otherwise.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     val isPrivate
         get() = value.length == 7
@@ -79,7 +79,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      * 
      * @param code The character sequence representing the SDI recipient code.
      * @throws MalformedInputException If the input string is not a valid SDI recipient code.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     constructor(code: CharSequence) : this(+code.toString())
 
@@ -100,7 +100,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
          * - Length: 6 or 7 characters.
          * - Characters: Uppercase letters (A-Z) and digits (0-9) only.
          *
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         val PATTERN = Regex("^[A-Z0-9]{6,7}$")
@@ -111,7 +111,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
          *
          * The value of this code is "0000000", which conforms to the expected format for private recipient codes.
          *
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         val GENERIC_PRIVATE = SDIRecipientCode("0000000")
@@ -121,7 +121,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
          * often used in contexts where the recipient is a foreign organization or entity
          * and does not fall under typical PA (Public Administration) or private entity constraints.
          *
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         val FOREIGN = SDIRecipientCode("XXXXXXX")
@@ -135,7 +135,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
          *
          * @param code The input sequence to validate as an SDI recipient code.
          * @return `true` if the input is a valid SDI recipient code, otherwise `false`.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         fun isValidSDIRecipientCode(code: CharSequence) = runCatching { SDIRecipientCode(code) }.isSuccess
@@ -150,7 +150,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
          *         validation or conversion fails.
          * @receiver The input [CharSequence] to be evaluated as an SDI recipient code.
          *
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         fun CharSequence.toSDIRecipientCode() = runCatching { SDIRecipientCode(this) }
@@ -187,7 +187,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      * @param index the index of the character to return, must be within the bounds of the string.
      * @return the character at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >= length).
-     * @since 2026-02
+     * @since 2026-02.1
      */
     override fun get(index: Int) = value[index]
 
@@ -201,7 +201,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      * bounds of this sequence and not less than `startIndex`.
      * @return the specified subsequence as a new character sequence.
      * @throws IndexOutOfBoundsException if `startIndex` or `endIndex` are out of bounds.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     override fun subSequence(startIndex: Int, endIndex: Int) = value.subSequence(startIndex, endIndex)
 
@@ -210,7 +210,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      * This representation is based on the underlying value of the object.
      *
      * @return a string equivalent to the value representation of this object.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     override fun toString() = value
 }

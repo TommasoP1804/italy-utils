@@ -61,7 +61,7 @@ import java.time.Year
  * @property postalCodes A list of postal codes associated with the municipality.
  * @property position The geographical coordinates of the municipality.
  * @property props Additional properties related to the municipality.
- * @since 2026-02
+ * @since 2026-02.1
  * @author Tommaso Pastorelli
  */
 @ConsistentCopyVisibility
@@ -116,7 +116,7 @@ data class Municipality private constructor(
          * This property lazily parses the CSV and constructs a list of `Municipality` objects.
          *
          * @throws NoSuchFileException if the resource file is not found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         val LIST: List<Municipality>
@@ -201,7 +201,7 @@ data class Municipality private constructor(
          * A list containing the next change of the dataset.
          * Valid from 2026-01-01T00:00:00+01:00.
          *
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         val CHANGE_LIST: List<StringMap>
@@ -230,7 +230,7 @@ data class Municipality private constructor(
          * meeting the specified classification criteria by checking the `isCapitalOrMetropolitanOrFreeConsortium` property.
          *
          * @return A list of municipalities that are either capitals, part of a metropolitan area, or free consortia.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         val CAPITALS_OR_METROPOLITAN_OR_FREE_CONSORTIUM: List<Municipality>
             get() = LIST.filter { it.isCapitalOrMetropolitanOrFreeConsortium }
@@ -241,7 +241,7 @@ data class Municipality private constructor(
          *
          * @param name the name to search for in the list.
          * @return the matching item from the list, or `null` if no match is found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofDenomination(name: String) =
@@ -252,7 +252,7 @@ data class Municipality private constructor(
          *
          * @param code The progressive identifier of the municipality to search for.
          * @return The municipality with the specified progressive identifier, or null if not found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofProgressiveCode(code: String) = LIST.find { it.progressiveCode == code }
@@ -261,7 +261,7 @@ data class Municipality private constructor(
          *
          * @param code the progressive number to search for
          * @return the municipality object with a matching progressive number, or null if not found
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofProgressiveCode(code: Number) = LIST.find { it.progressiveCode.toInt() == code.toInt() }
@@ -271,7 +271,7 @@ data class Municipality private constructor(
          * ignoring case sensitivity.
          *
          * @param code The alphanumeric code to match against the elements in the list.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofAlphanumericCode(code: String) = LIST.find { it.alphanumericCode equalsIgnoreCase code }
@@ -281,7 +281,7 @@ data class Municipality private constructor(
          *
          * @param code The numeric code to search for in the LIST collection.
          * @return The first element in the LIST collection with a matching numericCode, or null if no match is found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofNumericCode(code: String) = LIST.find { it.numericCode.toInt() == code.toInt() }
@@ -289,7 +289,7 @@ data class Municipality private constructor(
          * Searches for and retrieves an entry from the LIST based on the provided numeric code.
          *
          * @param code the numeric code to search for within the LIST.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofNumericCode(code: Number) = LIST.find { it.numericCode.toInt() == code.toInt() }
@@ -299,7 +299,7 @@ data class Municipality private constructor(
          *
          * @param code The cadastral code used for the search.
          * @return The municipality with the matching cadastral code, or null if no match is found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofCadastralCode(code: String) = LIST.find { it.cadastralCode equalsIgnoreCase code}
@@ -309,7 +309,7 @@ data class Municipality private constructor(
          *
          * @param code the postal code to search for within the municipalities' postal codes
          * @return the municipality that contains the postal code, or null if no such municipality exists
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofPostalCode(code: String) = LIST.find { it.postalCodes?.contains(code) ?: false }
@@ -318,7 +318,7 @@ data class Municipality private constructor(
          * Finds the first element in a predefined list of municipalities that matches the specified geographical coordinate.
          *
          * @param coordinates The geographical coordinates to match against the position of municipalities in the list.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofPosition(coordinates: GeoCoordinate) = LIST.find { it.position?.equals(coordinates) ?: false }
@@ -329,7 +329,7 @@ data class Municipality private constructor(
          * @param latitude The latitude of the desired geographical position.
          * @param longitude The longitude of the desired geographical position.
          * @return The matched item from the list based on the position, or null if no match is found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         fun ofPosition(latitude: Double, longitude: Double) = LIST.find { it.position?.equals(GeoCoordinate(latitude, longitude)) ?: false }
@@ -338,7 +338,7 @@ data class Municipality private constructor(
          * Filters the list of municipalities to include only those belonging to the specified region.
          *
          * @param region The region used as criteria to filter municipalities.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun byRegion(region: Region) = LIST.filter { it.region == region }
@@ -348,7 +348,7 @@ data class Municipality private constructor(
          *
          * @param code The supra-municipal territorial unit code used as the filtering criterion.
          * @return A list of municipalities matching the specified supra-municipal territorial unit code.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun bySupraMunicipalTerritorialUnitcode(code: String) = LIST.filter { it.supraMunicipalTerritorialUnitCode == code }
@@ -356,7 +356,7 @@ data class Municipality private constructor(
          * Filters the list of municipalities by the specified supra-municipal territorial unit code.
          *
          * @param code The supra-municipal territorial unit code to filter municipalities by. Must be a number.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun bySupraMunicipalTerritorialUnitcode(code: Number) = LIST.filter { it.supraMunicipalTerritorialUnitCode.toInt() == code.toInt() }
@@ -365,7 +365,7 @@ data class Municipality private constructor(
          * Filters the list of municipalities by the specified province.
          *
          * @param province The province to filter the municipalities by.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun byProvince(province: Province) = LIST.filter { it.province == province }
@@ -374,7 +374,7 @@ data class Municipality private constructor(
          *
          * @param provinceCode The numeric code of the province to filter municipalities by.
          * @return A new filtered list containing only the municipalities that belong to the specified province.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun byProvince(provinceCode: Number) = LIST.filter { it.storicProvinceCode.toInt() == provinceCode.toInt() }
@@ -383,7 +383,7 @@ data class Municipality private constructor(
          * Filters a predefined list of entities based on the specified geographical distribution.
          *
          * @param geographicalDistribution The geographical distribution to filter the entities by.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun byGeographicalDistribution(geographicalDistribution: GeographicDistribution) =
@@ -393,7 +393,7 @@ data class Municipality private constructor(
          *
          * @param code The geographical distribution code to filter the municipalities by.
          * @return A list of municipalities matching the given geographical distribution code.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun byGeographicalDistributionCode(code: String) = LIST.filter { it.geographicalDistributionCode == code }
@@ -402,7 +402,7 @@ data class Municipality private constructor(
          *
          * @param code The numerical code representing the geographical distribution to filter by.
          * @return A filtered list containing items whose geographical distribution code matches the provided value.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun byGeographicalDistributionCode(code: Number) = LIST.filter { it.geographicalDistributionCode.toInt() == code.toInt() }
@@ -412,7 +412,7 @@ data class Municipality private constructor(
          *
          * @param code the automobilistic code to filter municipalities by
          * @return a list of municipalities matching the specified automobilistic code
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun byAutomobilisticCode(code: String) = LIST.filter { it.automobilisticCode == code }
@@ -427,7 +427,7 @@ data class Municipality private constructor(
          * @throws HttpResponseException if the HTTP response status code indicates an error.
          * @return the Municipality instance matching the given geographic coordinates,
          *         or null if no matching municipality is found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun fromCoordinates(coordinates: GeoCoordinate): Municipality? {

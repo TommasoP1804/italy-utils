@@ -8,7 +8,7 @@ import dev.tommasop1804.kutils.equalsIgnoreCase
  *
  * @property italianName The Italian name of the geographical distribution.
  * @property code The numeric code representing the geographical distribution.
- * @since 2026-02
+ * @since 2026-02.1
  */
 @Suppress("unused")
 enum class GeographicDistribution(val italianName: String, val code: Int) {
@@ -21,7 +21,7 @@ enum class GeographicDistribution(val italianName: String, val code: Int) {
      *
      * @property italianName The Italian name for the geographic distribution.
      * @property code The numeric code representing the geographic area.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     CENTER("Centro", 3),
     /**
@@ -29,7 +29,7 @@ enum class GeographicDistribution(val italianName: String, val code: Int) {
      *
      * @property italianName The Italian name for this distribution.
      * @property code The numerical code associated with this distribution.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     ISLANDS("Isole", 5),
     /**
@@ -41,7 +41,7 @@ enum class GeographicDistribution(val italianName: String, val code: Int) {
      *
      * @property italianName The name of the distribution in Italian.
      * @property code The numeric code associated with the distribution.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     NORTH_WEST("Nord-ovest", 1),
     /**
@@ -50,7 +50,7 @@ enum class GeographicDistribution(val italianName: String, val code: Int) {
      *
      * @property italianName The Italian name of the geographic area.
      * @property code The numeric code associated with this geographic area.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     NORTH_EAST("Nord-est", 2),
     /**
@@ -61,7 +61,7 @@ enum class GeographicDistribution(val italianName: String, val code: Int) {
      *
      * @property italianName The Italian name for the geographic distribution, specifically "Sud" for this entry.
      * @property code The numeric code associated with this distribution, which is 4 for the south.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     SOUTH("Sud", 4);
 
@@ -71,7 +71,7 @@ enum class GeographicDistribution(val italianName: String, val code: Int) {
          *
          * @param name The Italian name to search for, ignoring case sensitivity.
          * @return The `GeographicDistribution` entry that matches the given name, or null if no match is found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         infix fun ofItalianName(name: String) = entries.find { it.italianName equalsIgnoreCase name }
         
@@ -80,7 +80,7 @@ enum class GeographicDistribution(val italianName: String, val code: Int) {
          *
          * @param code The numeric code to search for.
          * @return The `GeographicDistribution` entry with the specified code, or null if no match is found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         infix fun ofCode(code: Int) = entries.find { it.code == code }
         /**
@@ -88,7 +88,7 @@ enum class GeographicDistribution(val italianName: String, val code: Int) {
          *
          * @param code The code to search for as a string.
          * @return The `GeographicDistribution` entry that matches the given code, or null if no match is found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         infix fun ofCode(code: String) = entries.find { it.code.toString() == code }
     }

@@ -67,7 +67,7 @@ tasks.withType(JavaCompile::class.java).configureEach {
 }
 
 mavenPublishing {
-    coordinates("dev.tommasop1804", "italy-utils", "2026-02")
+    coordinates("dev.tommasop1804", "italy-utils", "2026-02.1")
 
     pom {
         name.set("Italy Utils")

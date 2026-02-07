@@ -20,7 +20,7 @@ object Translators {
      *
      * @property ITALIAN_COUNTRIES_TRANSLATOR A `Translator` instance that loads
      * translations for country names in Italian from the specified resource file.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     @CheckTranslationKey(correctKey = $$"Country$alpha2")
     val ITALIAN_COUNTRIES_TRANSLATOR

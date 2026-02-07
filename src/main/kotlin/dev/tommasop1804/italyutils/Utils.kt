@@ -1,5 +1,5 @@
 @file:JvmName("UtilsKt")
-@file:Since("2026-02")
+@file:Since("2026-02.1")
 @file:Suppress("unused")
 
 package dev.tommasop1804.italyutils
@@ -26,7 +26,7 @@ import java.time.temporal.TemporalAccessor
  * @return A `String2` representing the holiday name in Italian (first) and English (second), or `null` if
  *         the date does not correspond to any Italian holiday.
  * @throws java.time.temporal.UnsupportedTemporalTypeException if cannot define year, month and day from the given date.
- * @since 2026-02
+ * @since 2026-02.1
  */
 val TemporalAccessor.italianHoliday: String2?
     get() {
@@ -82,7 +82,7 @@ val TemporalAccessor.italianHoliday: String2?
  * @receiver The temporal object, such as a `LocalDate`, to be checked.
  * @return `true` if the date corresponds to an Italian public holiday, `false` otherwise.
  * @throws java.time.temporal.UnsupportedTemporalTypeException if cannot define year, month and day from the given date.
- * @since 2026-02
+ * @since 2026-02.1
  */
 val TemporalAccessor.isItalianHoliday: Boolean
     get() = italianHoliday.isNotNull()

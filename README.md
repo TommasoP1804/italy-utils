@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.tommasop1804:italy-utils:2026-02")
+    implementation("dev.tommasop1804:italy-utils:2026-02.1")
 }
 ```
 
@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'dev.tommasop1804:italy-utils:2026-02'
+    implementation 'dev.tommasop1804:italy-utils:2026-02.1'
 }
 ```
 

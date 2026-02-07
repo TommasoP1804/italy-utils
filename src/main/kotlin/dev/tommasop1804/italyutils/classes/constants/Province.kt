@@ -12,7 +12,7 @@ import dev.tommasop1804.kutils.tryOr
  * @property region The region to which the province belongs.
  * @property isRegionalCapital Indicates if the province serves as the capital of its region.
  * @property istatCode The numeric code associated with the province.
- * @since 2026-02
+ * @since 2026-02.1
  */
 @Suppress("unused")
 enum class Province(
@@ -161,7 +161,7 @@ enum class Province(
      *
      * @receiver The province to check for deprecation status.
      * @return `true` if the province is annotated with `@Deprecated`, `false` otherwise.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     val isDeprecated
         get() = tryOr({ false }) { javaClass.getField(name).isAnnotationPresent(Deprecated::class.java) }
@@ -172,7 +172,7 @@ enum class Province(
          * This subset is filtered from all available entries in the collection based on the `isRegionalCapital` property.
          * Each entry included in this collection meets the condition of being identified as a regional capital.
          *
-         * @since 2026-02
+         * @since 2026-02.1
          */
         val CAPITALS = entries.filter { it.isRegionalCapital }
 
@@ -181,7 +181,7 @@ enum class Province(
          *
          * @param code The code to match against the Province entries.
          * @return The Province instance with a matching code, or null if no matches are found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofCode(code: String) = entries.find { it.code equalsIgnoreCase code }
@@ -191,7 +191,7 @@ enum class Province(
          *
          * @param code The numeric code of the province to search for.
          * @return The province entry matching the given numeric code, or null if no match is found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofIstatCode(code: String) = entries.find { it.istatCode == code }
@@ -201,7 +201,7 @@ enum class Province(
          *
          * @param code The numeric code associated with the province to be retrieved.
          * @return The Province object that matches the given numeric code, or null if no match is found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofIstatCode(code: Number) = entries.find { it.istatCode.toInt() == code.toInt() }
@@ -211,7 +211,7 @@ enum class Province(
          *
          * @param region The region to filter the entries by.
          * @return A list of entries belonging to the specified region and not marked as deprecated.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun byRegion(region: Region) = entries.filter { it.region == region && !it.isDeprecated }
@@ -221,7 +221,7 @@ enum class Province(
          *
          * @param region The ISTAT code as a [Number] representing the region to filter by.
          * @return A list of entries that belong to the specified region and are not deprecated.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun byRegion(region: Number) = entries.filter {

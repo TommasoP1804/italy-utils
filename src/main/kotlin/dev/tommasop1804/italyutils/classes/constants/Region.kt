@@ -13,7 +13,7 @@ import dev.tommasop1804.kutils.equalsIgnoreCase
  *
  * @param displayName The human-readable name of the region.
  * @param istatCode The ISTAT code that uniquely identifies the region.
- * @since 2026-02
+ * @since 2026-02.1
  * @author Tommaso Pastorelli
  */
 @Suppress("unused")
@@ -48,7 +48,7 @@ enum class Region(
      *
      * @receiver The region to which the provinces belong.
      * @return A list of provinces belonging to this region.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     val provinces: List<Province>
         get() = Province.byRegion(this)
@@ -59,7 +59,7 @@ enum class Region(
      * of the region instance.
      *
      * @return The name of the capital city based on the region's provinces.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     val capital: String2
         get() = capitals[this]!!
@@ -70,7 +70,7 @@ enum class Region(
          * This mapping is derived by associating each entry with the first
          * value of its province list where the Boolean condition in the pair is true.
          *
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         val capitals by lazy {
@@ -85,7 +85,7 @@ enum class Region(
          *
          * @param regione The display name of the region to search for.
          * @return The Region object that matches the given display name, or null if no match is found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofName(regione: String): Region? {
@@ -101,7 +101,7 @@ enum class Region(
          *
          * @param code The ISTAT code to search for.
          * @return The region entry matching the given ISTAT code, or null if no match is found.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofIstatCode(code: String) = entries.find { it.istatCode == code }
@@ -109,7 +109,7 @@ enum class Region(
          * Finds an entry in the collection with a matching ISTAT code.
          *
          * @param code The ISTAT code as a [Number] to match against the entries.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun ofIstatCode(code: Number) = entries.find { it.istatCode.toInt() == code.toInt() }
@@ -119,7 +119,7 @@ enum class Region(
          *
          * @param province The province whose associated region is to be retrieved.
          * @return The region associated with the specified province.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun fromProvince(province: Province) = province.region
@@ -129,7 +129,7 @@ enum class Region(
          *
          * @param provinceCode the code of the province to map to a region
          * @return the region corresponding to the provided province code, or null if no matching province is found
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         infix fun fromProvince(provinceCode: String) = (Province.ofCode(provinceCode))?.region

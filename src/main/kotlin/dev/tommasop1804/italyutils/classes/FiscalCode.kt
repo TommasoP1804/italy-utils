@@ -44,7 +44,7 @@ import kotlin.text.iterator
  * @constructor Ensures the given value is a valid Codice Fiscale.
  * Throws [MalformedInputException] if the initial string does not match the required format.
  * @param value The Codice Fiscale string.
- * @since 2026-02
+ * @since 2026-02.1
  * @author Tommaso Pastorelli
  */
 @JvmInline
@@ -60,7 +60,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
      * the current length of the underlying value.
      *
      * @return The number of characters in the value string.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     override val length: Int
         get() = value.length
@@ -77,7 +77,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
      * @return A `Pair` where the first element is the year as an `Int`, and the second element
      *         is a `MonthDay` representing the corresponding month and day.
      * @throws StringIndexOutOfBoundsException If the value does not meet the expected length or format.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     @UnreliableYear
     val birthDate: LocalDate
@@ -108,7 +108,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
      *
      * @return A string representing the city code.
      * @throws StringIndexOutOfBoundsException if the `value` property is shorter than 14 characters.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     val municipalityOfBirthCode: String
         get() = value[11..14]
@@ -124,7 +124,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
      *
      * @return A `Municipality` instance corresponding to the cadastral code found in the `value` property, or `null` if invalid.
      * @throws IndexOutOfBoundsException if the subset of the `value` property used for the cadastral code is out of range.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     val municipalityOfBirth: Municipality?
         get() = Municipality.Companion ofCadastralCode municipalityOfBirthCode
@@ -139,7 +139,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
      * @return the biological sex as an instance of the [Sex] enum.
      * @throws StringIndexOutOfBoundsException if the value string does not contain the required indices.
      * @throws NumberFormatException if the substring cannot be converted to an integer.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     val sex: Sex
         get() = if (value[9..<11].toInt() > 40) Sex.FEMALE else Sex.MALE
@@ -153,7 +153,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
      * of codes like `ItalianFiscalCode` values.
      *
      * @param value the initial character sequence to be processed and used for the instance.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     constructor(value: CharSequence) : this(+value.toString())
 
@@ -177,7 +177,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
          *
          * @receiver the string to validate.
          * @return `true` if the string represents a valid Italian Fiscal Code, `false` otherwise.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         fun String.isValidItalianFiscalCode() = runCatching { FiscalCode(this) }.isSuccess
@@ -195,7 +195,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
          * @receiver The string to be converted into an `FiscalCode`.
          * @return A `Result` containing either the successfully created `FiscalCode` instance
          *         or the exception encountered during the conversion process.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         fun String.toItalianFiscalCode() = runCatching { FiscalCode(this) }
@@ -210,7 +210,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
          * @param cityCode A four-character city code. The first character must be an uppercase letter, followed by three digits.
          * @return A computed alphanumeric code derived from the provided details, wrapped in a [Result].
          * @throws ValidationFailedException If the input values do not meet the required conditions.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         fun compute(lastName: String, name: String, birthDate: LocalDate, sex: Sex, cityCode: String) = runCatching {
@@ -313,7 +313,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
          *
          * @param code the input string used to compute the control letter. It is expected to contain valid alphanumeric characters.
          * @return the computed control letter as a single uppercase character.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         fun computeControlLetter(code: String): Char {
@@ -474,7 +474,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
      * @param index the position of the desired element.
      * @return the element located at the specified index.
      * @throws IndexOutOfBoundsException if the index is out of range.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     override operator fun get(index: Int) = value[index]
 
@@ -485,7 +485,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
      * @param endIndex the end index of the subsequence, exclusive.
      * @return a new character sequence that is a subsequence of this character sequence.
      * @throws IndexOutOfBoundsException if `startIndex` or `endIndex` is out of range, or if `startIndex > endIndex`.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     override fun subSequence(startIndex: Int, endIndex: Int) = value.subSequence(startIndex, endIndex)
 
@@ -494,7 +494,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
      * This implementation converts the `value` property to uppercase and returns it.
      *
      * @return the uppercase string representation of the `value` property.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     override fun toString() = value
 }

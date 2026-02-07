@@ -39,7 +39,7 @@ import java.time.temporal.ChronoUnit
  * @property issuingAuthority The authority that issued the licence (e.g., "MCTC", "UCO").
  * @property categories The set of driving categories on this licence.
  * @property codes The set of additional codes associated with the licence.
- * @since 2026-02
+ * @since 2026-02.1
  * @author Tommaso Pastorelli
  */
 @Suppress("unused")
@@ -63,7 +63,7 @@ data class DriverLicence(
      * Indicates whether the licence has expired based on the current date.
      *
      * @return `true` if the [expiryDate] is before today's date, `false` otherwise.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     val isExpired: Boolean
         get() = expiryDate.isBefore(LocalDate())
@@ -73,7 +73,7 @@ data class DriverLicence(
      * This will return `null` for foreign birth places.
      *
      * @return the [Municipality] corresponding to [birthPlace], or `null` if not found.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     val birthMunicipality: Municipality?
         get() = Municipality.Companion ofDenomination birthPlace.substringBefore('(').trim()
@@ -101,7 +101,7 @@ data class DriverLicence(
          * The licence number must conform to the pattern of 1 uppercase letter, 1 digit (or letter for compatibility),
          * 7 alphanumeric characters, and 1 uppercase letter (check character).
          *
-         * @since 2026-02
+         * @since 2026-02.1
          */
         val LICENCE_NUMBER_REGEX = Regex("^[A-Z][0-9A-Z][0-9A-Z]{7}[A-Z]$")
 
@@ -110,7 +110,7 @@ data class DriverLicence(
          *
          * @receiver The string to validate.
          * @return `true` if the string matches the licence number format, `false` otherwise.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         fun String.isValidItalianDriverLicenceNumber() = LICENCE_NUMBER_REGEX(uppercase())
@@ -127,7 +127,7 @@ data class DriverLicence(
          * @param birthDate The birth date of the individual.
          * @param categories The set of driving categories held.
          * @return The calculated expiration date of the licence.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         fun computeExpiration(issueDate: LocalDate, birthDate: LocalDate, categories: Set<OwnedCategory>): LocalDate =
@@ -222,68 +222,68 @@ data class DriverLicence(
      * as defined by EU Directive 2006/126/EC.
      *
      * @property validityGroup The validity group that determines the expiration rules for this category.
-     * @since 2026-02
+     * @since 2026-02.1
      * @author Tommaso Pastorelli
      */
     enum class Category(val validityGroup: ValidityGroup) {
         /** Mopeds (ciclomotori) - max 45 km/h, max 50cc or 4kW
-         * @since 2026-02
+         * @since 2026-02.1
          */
         AM(ValidityGroup.STANDARD),
         /** Light motorcycles - max 125cc, max 11kW
-         * @since 2026-02
+         * @since 2026-02.1
          */
         A1(ValidityGroup.STANDARD),
         /** Medium motorcycles - max 35kW
-         * @since 2026-02
+         * @since 2026-02.1
          */
         A2(ValidityGroup.STANDARD),
         /** All motorcycles
-         * @since 2026-02
+         * @since 2026-02.1
          */
         A(ValidityGroup.STANDARD),
         /** Light quadricycles - max 400kg, max 15kW
-         * @since 2026-02
+         * @since 2026-02.1
          */
         B1(ValidityGroup.STANDARD),
         /** Motor vehicles - max 3500kg, max 8+1 passengers
-         * @since 2026-02
+         * @since 2026-02.1
          */
         B(ValidityGroup.STANDARD),
         /** Motor vehicles (B) with trailer - over 750kg
-         * @since 2026-02
+         * @since 2026-02.1
          0*/
         BE(ValidityGroup.STANDARD),
         /** Medium goods vehicles - 3500-7500kg
-         * @since 2026-02
+         * @since 2026-02.1
          */
         C1(ValidityGroup.PROFESSIONAL_C),
         /** Medium goods vehicles (C1) with trailer
-         * @since 2026-02
+         * @since 2026-02.1
          */
         C1E(ValidityGroup.PROFESSIONAL_C),
         /** Large goods vehicles - over 3500kg
-         * @since 2026-02
+         * @since 2026-02.1
          */
         C(ValidityGroup.PROFESSIONAL_C),
         /** Large goods vehicles (C) with trailer
-         * @since 2026-02
+         * @since 2026-02.1
          */
         CE(ValidityGroup.PROFESSIONAL_C),
         /** Minibuses - max 16+1 passengers
-         * @since 2026-02
+         * @since 2026-02.1
          */
         D1(ValidityGroup.PROFESSIONAL_D),
         /** Minibuses (D1) with trailer
-         * @since 2026-02
+         * @since 2026-02.1
          */
         D1E(ValidityGroup.PROFESSIONAL_D),
         /** Buses - over 8+1 passengers
-         * @since 2026-02
+         * @since 2026-02.1
          */
         D(ValidityGroup.PROFESSIONAL_D),
         /** Buses (D) with trailer
-         * @since 2026-02
+         * @since 2026-02.1
          */
         DE(ValidityGroup.PROFESSIONAL_D);
 
@@ -293,7 +293,7 @@ data class DriverLicence(
              *
              * @param name The name of the entry to search for in the collection.
              * @return The entry with the matching name, or `null` if no match is found.
-             * @since 2026-02
+             * @since 2026-02.1
              */
             @JvmStatic
             infix fun of(name: String) = entries.find { it.name == name }
@@ -303,7 +303,7 @@ data class DriverLicence(
              *
              * @param group The `ValidityGroup` to compare against the `validityGroup` property of each entry.
              * @return The first `Category` entry with a matching `validityGroup`, or `null` if no match is found.
-             * @since 2026-02
+             * @since 2026-02.1
              */
             @JvmStatic
             infix fun byValidityGroup(group: ValidityGroup) = entries.filter { it.validityGroup == group }
@@ -320,7 +320,7 @@ data class DriverLicence(
          * @param issueDate The date the licence was issued.
          * @param birthDate The birth date of the individual.
          * @return The calculated expiration date of the licence.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         fun computeExpiration(issueDate: LocalDate, birthDate: LocalDate): LocalDate =
             validityGroup.computeExpiration(issueDate, birthDate)
@@ -329,7 +329,7 @@ data class DriverLicence(
          * Defines the validity groups for driving licence categories, each with different
          * renewal periods based on the holder's age.
          *
-         * @since 2026-02
+         * @since 2026-02.1
          * @author Tommaso Pastorelli
          */
         enum class ValidityGroup {
@@ -339,21 +339,21 @@ data class DriverLicence(
              * - 50 to 69: 5 years.
              * - 70 to 79: 3 years.
              * - 80 and older: 2 years.
-             * @since 2026-02
+             * @since 2026-02.1
              */
             STANDARD,
             /**
              * Professional goods vehicle categories (C1, C1E, C, CE).
              * - Under 65: 5 years.
              * - 65 and older: 2 years.
-             * @since 2026-02
+             * @since 2026-02.1
              */
             PROFESSIONAL_C,
             /**
              * Professional passenger vehicle categories (D1, D1E, D, DE).
              * - Under 60: 5 years.
              * - 60 and older: 1 year.
-             * @since 2026-02
+             * @since 2026-02.1
              */
             PROFESSIONAL_D;
 
@@ -363,7 +363,7 @@ data class DriverLicence(
                  *
                  * @param category The driving licence category from which to derive the validity group.
                  * @return The `ValidityGroup` that defines the expiration rules for the specified category.
-                 * @since 2026-02
+                 * @since 2026-02.1
                  */
                 @JvmStatic
                 infix fun fromCategory(category: Category) = category.validityGroup
@@ -393,7 +393,7 @@ data class DriverLicence(
              * @param birthDate The birth date of the individual.
              * @param category The driving category.
              * @return The calculated expiration date for the given category.
-             * @since 2026-02
+             * @since 2026-02.1
              */
             fun computeExpiration(issueDate: LocalDate, birthDate: LocalDate): LocalDate {
                 val age = birthDate.until(issueDate, ChronoUnit.YEARS)
@@ -430,7 +430,7 @@ data class DriverLicence(
      * @property issueDate The date on which the driving category was issued.
      * @property expiryDate The date on which the driving category expires. It is calculated and
      * validated to align with the category-specific rules and the individual's birth date.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     @Suppress("unused")
     data class OwnedCategory(
@@ -450,7 +450,7 @@ data class DriverLicence(
          * @param birthDate The birth date of the individual.
          * @param category The set of driving categories held.
          * @return The calculated expiration date of the licence.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         fun computeExpiration(issueDate: LocalDate, birthDate: LocalDate): LocalDate =
             category.computeExpiration(issueDate, birthDate)

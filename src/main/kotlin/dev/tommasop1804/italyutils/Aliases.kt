@@ -11,7 +11,7 @@ import dev.tommasop1804.italyutils.classes.SDIRecipientCode
  * Type alias for `IdentityCard`, commonly used to simplify
  * and shorten the reference to the type in the codebase.
  *
- * @since 2026-02
+ * @since 2026-02.1
  */
 typealias CIE = IdentityCard
 /**
@@ -20,7 +20,7 @@ typealias CIE = IdentityCard
  * This typealias can be used interchangeably with IdentityCard to improve code readability
  * or adapt terminology to specific domain requirements.
  *
- * @since 2026-02
+ * @since 2026-02.1
  */
 typealias CartaIdentita = IdentityCard
 /**
@@ -29,21 +29,21 @@ typealias CartaIdentita = IdentityCard
  * the DriverLicence type, improving code readability or aligning 
  * with specific domain terminology.
  *
- * @since 2026-02
+ * @since 2026-02.1
  */
 typealias Patente = DriverLicence
 /**
  * Type alias for `FiscalCode`.
  * This alias can be used interchangeably with `FiscalCode` to improve code readability and simplicity in relevant contexts.
  * 
- * @since 2026-02
+ * @since 2026-02.1
  */
 typealias CF = FiscalCode
 /**
  * A type alias for `FiscalCode`, providing an alternative name for readability
  * or domain-specific purposes.
  *
- * @since 2026-02
+ * @since 2026-02.1
  */
 typealias CodiceFiscale = FiscalCode
 /**
@@ -58,6 +58,6 @@ typealias CodiceFiscale = FiscalCode
  * It ensures that the same validation and behavior are inherited from [SDIRecipientCode].
  *
  * @see SDIRecipientCode
- * @since 2026-02
+ * @since 2026-02.1
  */
 typealias CodiceDestinatarioSDI = SDIRecipientCode

@@ -44,7 +44,7 @@ import java.time.temporal.ChronoUnit
  * @property issuingMunicipality The name of the municipality that issued the card.
  * @property fiscalCode The Italian fiscal code of the card holder.
  * @property residentialAddress The residential address of the card holder.
- * @since 2026-02
+ * @since 2026-02.1
  * @author Tommaso Pastorelli
  */
 @Suppress("unused")
@@ -71,7 +71,7 @@ data class IdentityCard(
      * Indicates whether the card has expired based on the current date.
      *
      * @return `true` if the [expiryDate] is before today's date, `false` otherwise.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     val isExpired: Boolean
         get() = expiryDate.isBefore(LocalDate())
@@ -81,7 +81,7 @@ data class IdentityCard(
      * This will return `null` for foreign birth places.
      *
      * @return the [Municipality] corresponding to [birthPlace], or `null` if not found.
-     * @since 2026-02
+     * @since 2026-02.1
      */
     val birthMunicipality: Municipality?
         get() = Municipality.Companion ofDenomination birthPlace
@@ -101,7 +101,7 @@ data class IdentityCard(
          *
          * This is used within the IdentityCard context to ensure CIE numbers meet the expected standard.
          *
-         * @since 2026-02
+         * @since 2026-02.1
          */
         val CIE_NUMBER_REGEX = Regex("^[A-Z]{2}[0-9]{5}[A-Z]{2}$")
 
@@ -110,7 +110,7 @@ data class IdentityCard(
          *
          * @receiver The string to validate.
          * @return `true` if the string matches the CIE number format, `false` otherwise.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         fun String.isValidCIENumber() = CIE_NUMBER_REGEX(uppercase())
@@ -128,7 +128,7 @@ data class IdentityCard(
          * @param issueDate The date the document was issued.
          * @param birthDate The birth date of the individual.
          * @return The calculated expiration date of the document.
-         * @since 2026-02
+         * @since 2026-02.1
          */
         @JvmStatic
         fun computeExpiration(issueDate: LocalDate, birthDate: LocalDate): LocalDate {
