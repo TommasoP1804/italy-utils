@@ -1,14 +1,15 @@
-package com.sigeosrl.italyutils.classes
+package dev.tommasop1804.italyutils.classes
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
-import com.sigeosrl.italyutils.classes.constants.Province
+import dev.tommasop1804.italyutils.classes.constants.Province
 import dev.tommasop1804.kutils.*
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.exceptions.ValidationFailedException
+import dev.tommasop1804.kutils.invoke
 import tools.jackson.databind.DeserializationContext
 import tools.jackson.databind.SerializationContext
 import tools.jackson.databind.ValueDeserializer
@@ -17,6 +18,7 @@ import tools.jackson.databind.annotation.JsonDeserialize
 import tools.jackson.databind.annotation.JsonSerialize
 import tools.jackson.databind.node.ObjectNode
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 /**
  * Represents an Italian Driver's Licence (Patente di Guida) with all the data fields
@@ -74,7 +76,7 @@ data class DriverLicence(
      * @since 2026-02
      */
     val birthMunicipality: Municipality?
-        get() = Municipality ofDenomination birthPlace.substringBefore('(').trim()
+        get() = Municipality.Companion ofDenomination birthPlace.substringBefore('(').trim()
 
     init {
         LICENCE_NUMBER_REGEX(number) || throw MalformedInputException(
@@ -394,7 +396,7 @@ data class DriverLicence(
              * @since 2026-02
              */
             fun computeExpiration(issueDate: LocalDate, birthDate: LocalDate): LocalDate {
-                val age = birthDate.until(issueDate, java.time.temporal.ChronoUnit.YEARS)
+                val age = birthDate.until(issueDate, ChronoUnit.YEARS)
                 val standard = when (this) {
                     STANDARD -> when (age) {
                         in 0..<50 -> issueDate.plusYears(10)

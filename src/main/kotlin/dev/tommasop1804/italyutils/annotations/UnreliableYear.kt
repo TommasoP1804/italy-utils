@@ -1,4 +1,4 @@
-package com.sigeosrl.italyutils.annotations
+package dev.tommasop1804.italyutils.annotations
 
 @Target(
     AnnotationTarget.PROPERTY,

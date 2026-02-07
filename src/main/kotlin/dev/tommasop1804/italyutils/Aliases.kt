@@ -1,11 +1,11 @@
 @file:Suppress("unused")
 
-package com.sigeosrl.italyutils
+package dev.tommasop1804.italyutils
 
-import com.sigeosrl.italyutils.classes.DriverLicence
-import com.sigeosrl.italyutils.classes.FiscalCode
-import com.sigeosrl.italyutils.classes.IdentityCard
-import com.sigeosrl.italyutils.classes.SDIRecipientCode
+import dev.tommasop1804.italyutils.classes.DriverLicence
+import dev.tommasop1804.italyutils.classes.FiscalCode
+import dev.tommasop1804.italyutils.classes.IdentityCard
+import dev.tommasop1804.italyutils.classes.SDIRecipientCode
 
 /**
  * Type alias for `IdentityCard`, commonly used to simplify

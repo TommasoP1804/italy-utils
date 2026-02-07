@@ -1,6 +1,6 @@
-package com.sigeosrl.italyutils.classes.constants
+package dev.tommasop1804.italyutils.classes.constants
 
-import com.sigeosrl.italyutils.classes.constants.Translators.ITALIAN_COUNTRIES_TRANSLATOR
+import dev.tommasop1804.italyutils.classes.constants.Translators.ITALIAN_COUNTRIES_TRANSLATOR
 import dev.tommasop1804.kutils.annotations.CheckTranslationKey
 import dev.tommasop1804.kutils.classes.translators.Translator
 import dev.tommasop1804.kutils.compute

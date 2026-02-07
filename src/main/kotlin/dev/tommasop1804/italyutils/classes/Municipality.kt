@@ -1,8 +1,8 @@
-package com.sigeosrl.italyutils.classes
+package dev.tommasop1804.italyutils.classes
 
-import com.sigeosrl.italyutils.classes.constants.GeographicDistribution
-import com.sigeosrl.italyutils.classes.constants.Province
-import com.sigeosrl.italyutils.classes.constants.Region
+import dev.tommasop1804.italyutils.classes.constants.GeographicDistribution
+import dev.tommasop1804.italyutils.classes.constants.Province
+import dev.tommasop1804.italyutils.classes.constants.Region
 import dev.tommasop1804.kutils.*
 import dev.tommasop1804.kutils.classes.coding.JSON
 import dev.tommasop1804.kutils.classes.geography.GeoCoordinate

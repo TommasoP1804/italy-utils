@@ -1,4 +1,4 @@
-package com.sigeosrl.italyutils.classes.constants
+package dev.tommasop1804.italyutils.classes.constants
 
 import dev.tommasop1804.kutils.String2
 import dev.tommasop1804.kutils.equalsIgnoreCase

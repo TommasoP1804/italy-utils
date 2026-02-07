@@ -1,4 +1,4 @@
-package com.sigeosrl.italyutils.classes
+package dev.tommasop1804.italyutils.classes
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser

@@ -1,4 +1,4 @@
-package com.sigeosrl.italyutils.classes
+package dev.tommasop1804.italyutils.classes
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
@@ -6,11 +6,13 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
-import com.sigeosrl.italyutils.annotations.UnreliableYear
+import dev.tommasop1804.italyutils.annotations.UnreliableYear
 import dev.tommasop1804.kutils.*
 import dev.tommasop1804.kutils.classes.constants.Sex
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.exceptions.ValidationFailedException
+import dev.tommasop1804.kutils.get
+import dev.tommasop1804.kutils.invoke
 import jakarta.persistence.AttributeConverter
 import tools.jackson.databind.SerializationContext
 import tools.jackson.databind.ValueDeserializer
@@ -20,6 +22,7 @@ import tools.jackson.databind.annotation.JsonSerialize
 import java.time.LocalDate
 import java.time.Month
 import java.time.Year
+import kotlin.text.iterator
 
 /**
  * Represents an Italian fiscal code (Codice Fiscale).
@@ -124,7 +127,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
      * @since 2026-02
      */
     val municipalityOfBirth: Municipality?
-        get() = Municipality ofCadastralCode municipalityOfBirthCode
+        get() = Municipality.Companion ofCadastralCode municipalityOfBirthCode
 
     /**
      * Retrieves the biological sex (gender) based on encoded information in the `value` field.

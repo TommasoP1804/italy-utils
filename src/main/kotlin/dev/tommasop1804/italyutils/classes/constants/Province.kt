@@ -1,4 +1,4 @@
-package com.sigeosrl.italyutils.classes.constants
+package dev.tommasop1804.italyutils.classes.constants
 
 import dev.tommasop1804.kutils.equalsIgnoreCase
 import dev.tommasop1804.kutils.tryOr
@@ -225,7 +225,7 @@ enum class Province(
          */
         @JvmStatic
         infix fun byRegion(region: Number) = entries.filter {
-            it.region == (Region.ofIstatCode(region)
+            it.region == (Region.Companion.ofIstatCode(region)
                 ?: IllegalArgumentException("Region not found.")) && !it.isDeprecated
         }
     }

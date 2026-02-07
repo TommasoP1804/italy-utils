@@ -7,10 +7,10 @@ plugins {
 }
 
 group = "com.sigeosrl"
-version = "2026-02"
+version = "2026-02.1"
 // © S.I.GEO s.r.l. | Italy-Utils
 // Referent: Tommaso Pastorelli
-// Last update: Tommaso Pastorelli | 20260207T000750Z
+// Last update: Tommaso Pastorelli | 20260207T004515Z
 
 repositories {
     mavenCentral()

@@ -2,7 +2,7 @@
 @file:Since("2026-02")
 @file:Suppress("unused")
 
-package com.sigeosrl.italyutils
+package dev.tommasop1804.italyutils
 
 import dev.tommasop1804.kutils.LocalDate
 import dev.tommasop1804.kutils.MonthDay

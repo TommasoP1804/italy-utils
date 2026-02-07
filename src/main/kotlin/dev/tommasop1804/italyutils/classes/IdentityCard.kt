@@ -1,4 +1,4 @@
-package com.sigeosrl.italyutils.classes
+package dev.tommasop1804.italyutils.classes
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
@@ -12,6 +12,7 @@ import dev.tommasop1804.kutils.classes.measure.MeasureUnit
 import dev.tommasop1804.kutils.classes.registry.Contact
 import dev.tommasop1804.kutils.exceptions.ExpectationMismatchException
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
+import dev.tommasop1804.kutils.invoke
 import tools.jackson.databind.DeserializationContext
 import tools.jackson.databind.SerializationContext
 import tools.jackson.databind.ValueDeserializer
@@ -20,6 +21,7 @@ import tools.jackson.databind.annotation.JsonDeserialize
 import tools.jackson.databind.annotation.JsonSerialize
 import tools.jackson.databind.node.ObjectNode
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 /**
  * Represents an Italian Electronic Identity Card (Carta d'Identità Elettronica - CIE)
@@ -82,7 +84,7 @@ data class IdentityCard(
      * @since 2026-02
      */
     val birthMunicipality: Municipality?
-        get() = Municipality ofDenomination birthPlace
+        get() = Municipality.Companion ofDenomination birthPlace
 
     init {
         CIE_NUMBER_REGEX(number) || throw MalformedInputException(
@@ -130,7 +132,7 @@ data class IdentityCard(
          */
         @JvmStatic
         fun computeExpiration(issueDate: LocalDate, birthDate: LocalDate): LocalDate {
-            val age = birthDate.until(issueDate, java.time.temporal.ChronoUnit.YEARS)
+            val age = birthDate.until(issueDate, ChronoUnit.YEARS)
             val standard = when (age) {
                 in 0..<3 -> issueDate.plusYears(3)
                 in 3..<18 -> issueDate.plusYears(5)
@@ -145,7 +147,7 @@ data class IdentityCard(
 
         private fun validateExpiration(issueDate: LocalDate, birthDate: LocalDate, expiryDate: LocalDate): Boolean {
             val computedExpiration = computeExpiration(issueDate, birthDate)
-            val age = birthDate.until(issueDate, java.time.temporal.ChronoUnit.YEARS)
+            val age = birthDate.until(issueDate, ChronoUnit.YEARS)
             if (computedExpiration.isEqual(expiryDate)) return true
             if (age < 70) return false
             return expiryDate.isEqual(computedExpiration) || !issueDate.plusYears(10).isAfter(expiryDate)
