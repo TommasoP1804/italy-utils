@@ -18,35 +18,6 @@ repositories {
     maven { url = uri("https://download.osgeo.org/webdav/geotools/") }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-
-            versionMapping {
-                usage("java-api") {
-                    fromResolutionOf("runtimeClasspath")
-                }
-                usage("java-runtime") {
-                    fromResolutionResult()
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            url = uri("https://gitlab.com/api/v4/projects/75076537/packages/maven")
-            credentials(HttpHeaderCredentials::class) {
-                name = "Job-Token"
-                value = System.getenv("GITLAB_PRIVATE_TOKEN") ?: project.findProperty("gitLabPrivateToken") as String
-            }
-            authentication {
-                create<HttpHeaderAuthentication>("header")
-            }
-        }
-    }
-}
-
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -74,11 +45,6 @@ dependencies {
     implementation("tools.jackson.core:jackson-databind:3.0.2")
     implementation("tools.jackson.core:jackson-core:3.0.2")
     implementation("tools.jackson.module:jackson-module-kotlin:2.20.1")
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
 }
 
 kotlin {
