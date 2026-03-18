@@ -218,4 +218,31 @@ value class PartitaIVA(private val value: String) : CharSequence {
      * @since 2026-02.1
      */
     override fun toString() = value
+
+    /**
+     * Provides the `serialNumber` property as a component for destructuring declarations.
+     *
+     * This method allows accessing the `serialNumber` property of the `PartitaIVA` class
+     * in a destructuring assignment or when used with data-class-like functionality.
+     *
+     * @return the `serialNumber` associated with this instance.
+     * @since 2026-03
+     */
+    operator fun component1() = serialNumber
+    /**
+     * Extracts the second component of the `PartitaIVA` data structure.
+     *
+     * @return the value of the `provincialOfficeCode` property.
+     * @since 2026-03
+     */
+    operator fun component2() = provincialOfficeCode
+    /**
+     * Provides the third component of the `PartitaIVA` instance, corresponding to the `controlCode` property.
+     *
+     * This operator function allows destructuring declarations to access the `controlCode` field directly.
+     *
+     * @return the value of the `controlCode` property.
+     * @since 2026-03
+     */
+    operator fun component3() = controlCode
 }

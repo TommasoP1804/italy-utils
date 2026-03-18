@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package dev.tommasop1804.italyutils.classes
 
 import com.fasterxml.jackson.core.JsonGenerator
@@ -9,7 +11,6 @@ import dev.tommasop1804.italyutils.classes.constants.Province
 import dev.tommasop1804.kutils.*
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.exceptions.ValidationFailedException
-import dev.tommasop1804.kutils.invoke
 import tools.jackson.databind.DeserializationContext
 import tools.jackson.databind.SerializationContext
 import tools.jackson.databind.ValueDeserializer
@@ -42,7 +43,6 @@ import java.time.temporal.ChronoUnit
  * @since 2026-02.1
  * @author Tommaso Pastorelli
  */
-@Suppress("unused")
 @JsonSerialize(using = DriverLicence.Companion.Serializer::class)
 @JsonDeserialize(using = DriverLicence.Companion.Deserializer::class)
 @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = DriverLicence.Companion.OldSerializer::class)
@@ -92,7 +92,7 @@ data class DriverLicence(
         categories.forEach { it.expiryDate.expect(it.computeExpiration(issueDate, birthDate), ::expiryDate) }
         expiryDate.expect(computeExpiration(issueDate, birthDate, categories), ::expiryDate)
 
-        codes.validate(::codes) { isEmpty() || any { it.length == 2 && it.isNumeric } }
+        codes.validate(::codes) { code -> code.isEmpty() || code.any { it.length == 2 && it.isNumeric } }
     }
 
     companion object {
@@ -310,6 +310,16 @@ data class DriverLicence(
         }
 
         /**
+         * Provides a destructuring component that returns the `validityGroup`.
+         *
+         * The `component1` operator enables destructuring declarations for this class.
+         *
+         * @return The value of `validityGroup`.
+         * @since 2026-03
+         */
+        operator fun component1() = validityGroup
+
+        /**
          * Computes the expiration date for a driver's licence based on the provided issue date,
          * birth date, and the set of categories held.
          *
@@ -456,3 +466,13 @@ data class DriverLicence(
             category.computeExpiration(issueDate, birthDate)
     }
 }
+
+/**
+ * Represents a type alias for the DriverLicence type.
+ * This allows the usage of "Patente" as an alternative name for
+ * the DriverLicence type, improving code readability or aligning
+ * with specific domain terminology.
+ *
+ * @since 2026-03
+ */
+typealias Patente = DriverLicence

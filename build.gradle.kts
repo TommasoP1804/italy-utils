@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.3.0"
+    id("org.jetbrains.kotlin.jvm") version "2.3.20"
     id("maven-publish")
     id("io.freefair.aspectj.post-compile-weaving") version "9.1.0" // AspectJ plugin
     id("com.vanniktech.maven.publish") version "0.30.0"
@@ -7,10 +7,10 @@ plugins {
 }
 
 group = "com.sigeosrl"
-version = "2026-02.1"
+version = "2026-03"
 // © S.I.GEO s.r.l. | Italy-Utils
 // Referent: Tommaso Pastorelli
-// Last update: Tommaso Pastorelli | 20260207T004515Z
+// Last update: Tommaso Pastorelli | 20260318T133502Z
 
 repositories {
     mavenCentral()
@@ -21,9 +21,7 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
     implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
     implementation("org.locationtech.jts:jts-core:1.19.0")
     implementation("org.locationtech.jts.io:jts-io-common:1.19.0")
     implementation("org.hibernate:hibernate-spatial:6.6.0.Final")
@@ -41,20 +39,21 @@ dependencies {
     implementation("org.aspectj:aspectjweaver:1.9.24")
     implementation("org.slf4j:slf4j-api:2.0.13")
     implementation("org.slf4j:jul-to-slf4j:2.0.13")
-    implementation("dev.tommasop1804:kotlin-utils:1.0.0")
+    implementation("dev.tommasop1804:kotlin-utils:3.1.0")
     implementation("tools.jackson.core:jackson-databind:3.0.2")
     implementation("tools.jackson.core:jackson-core:3.0.2")
     implementation("tools.jackson.module:jackson-module-kotlin:2.20.1")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.20.1")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.20.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.20.1")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
 }
 
 kotlin {
     jvmToolchain(21)
     compilerOptions {
-        freeCompilerArgs.add("-Xallow-contracts-on-more-functions")
         freeCompilerArgs.add("-Xcontext-parameters")
-        /*freeCompilerArgs.add("-Xallow-condition-implies-returns-contracts")
-        freeCompilerArgs.add("-Xallow-holdsin-contract")*/
-
+        freeCompilerArgs.add("-Xname-based-destructuring=complete")
     }
 }
 
@@ -67,7 +66,7 @@ tasks.withType(JavaCompile::class.java).configureEach {
 }
 
 mavenPublishing {
-    coordinates("dev.tommasop1804", "italy-utils", "2026-02.1")
+    coordinates("dev.tommasop1804", "italy-utils", "2026-03")
 
     pom {
         name.set("Italy Utils")

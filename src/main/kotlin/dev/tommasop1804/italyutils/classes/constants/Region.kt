@@ -134,4 +134,23 @@ enum class Region(
         @JvmStatic
         infix fun fromProvince(provinceCode: String) = (Province.ofCode(provinceCode))?.region
     }
+
+    /**
+     * Returns the display name of the Region when used in a destructuring declaration.
+     * 
+     * This method allows destructuring assignments to retrieve the display name of the region.
+     *
+     * @return The display name of the region.
+     * @since 2026-03
+     */
+    operator fun component1() = displayName
+    /**
+     * Operator function providing destructuring functionality to retrieve the second component of the Region.
+     * 
+     * Returns the `istatCode` associated with the Region.
+     *
+     * @return The `istatCode` field of the Region.
+     * @since 2026-03
+     */
+    operator fun component2() = istatCode
 }

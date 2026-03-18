@@ -1,3 +1,5 @@
+@file:Suppress("unused", "kutils_collection_declaration", "kutils_temporal_of_as_temporal")
+
 package dev.tommasop1804.italyutils.classes
 
 import com.fasterxml.jackson.core.JsonGenerator
@@ -11,8 +13,6 @@ import dev.tommasop1804.kutils.*
 import dev.tommasop1804.kutils.classes.constants.Sex
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.exceptions.ValidationFailedException
-import dev.tommasop1804.kutils.get
-import dev.tommasop1804.kutils.invoke
 import jakarta.persistence.AttributeConverter
 import tools.jackson.databind.SerializationContext
 import tools.jackson.databind.ValueDeserializer
@@ -22,7 +22,6 @@ import tools.jackson.databind.annotation.JsonSerialize
 import java.time.LocalDate
 import java.time.Month
 import java.time.Year
-import kotlin.text.iterator
 
 /**
  * Represents an Italian fiscal code (Codice Fiscale).
@@ -52,7 +51,6 @@ import kotlin.text.iterator
 @JsonDeserialize(using = FiscalCode.Companion.Deserializer::class)
 @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = FiscalCode.Companion.OldSerializer::class)
 @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = FiscalCode.Companion.OldDeserializer::class)
-@Suppress("unused", "kutils_collection_declaration", "kutils_temporal_of_as_temporal")
 value class FiscalCode private constructor(private val value: String) : CharSequence {
     /**
      * Represents the length of the value string.
@@ -497,4 +495,59 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
      * @since 2026-02.1
      */
     override fun toString() = value
+
+
+    /**
+     * Extracts the `birthDate` component of the `FiscalCode` object.
+     *
+     * This operator function is typically used in destructuring declarations to retrieve
+     * the `birthDate` property of an instance.
+     *
+     * Note: The `@UnreliableYear` annotation indicates that this functionality should be
+     * used cautiously as it is experimental or subject to change.
+     *
+     * @return the `birthDate` component of the `FiscalCode`.
+     * @since 2026-03
+     */
+    @UnreliableYear    
+    operator fun component1() = birthDate
+    /**
+     * Retrieves the third component of the FiscalCode, which represents the sex.
+     *
+     * @return the sex associated with the FiscalCode.
+     * @since 2026-03
+     */
+    operator fun component2() = sex
+    /**
+     * Extracts the second component of the `FiscalCode`, representing the code of the municipality of birth.
+     *
+     * @return the municipality of birth code associated with this instance.
+     * @since 2026-03
+     */
+    operator fun component3() = municipalityOfBirthCode
+    /**
+     * Extracts the fourth component of the `FiscalCode`, representing the municipality of birth.
+     *
+     * This operator function is designed to facilitate destructuring declarations or other
+     * scenarios where the municipality of birth needs to be accessed directly.
+     *
+     * @return the municipality of birth associated with this instance.
+     * @since 2026-03
+     */
+    operator fun component4() = municipalityOfBirth
 }
+
+/**
+ * Type alias for `FiscalCode`.
+ * This alias can be used interchangeably with `FiscalCode` to improve code readability and simplicity in relevant contexts.
+ *
+ * @since 2026-03
+ */
+typealias CF = FiscalCode
+/**
+ * A type alias for `FiscalCode`, providing an alternative name for readability
+ * or domain-specific purposes.
+ *
+ * @since 2026-03
+ */
+typealias CodiceFiscale = FiscalCode

@@ -4,7 +4,7 @@ import dev.tommasop1804.italyutils.classes.constants.GeographicDistribution
 import dev.tommasop1804.italyutils.classes.constants.Province
 import dev.tommasop1804.italyutils.classes.constants.Region
 import dev.tommasop1804.kutils.*
-import dev.tommasop1804.kutils.classes.coding.JSON
+import dev.tommasop1804.kutils.classes.coding.Json
 import dev.tommasop1804.kutils.classes.geography.GeoCoordinate
 import dev.tommasop1804.kutils.classes.measure.MeasureUnit
 import dev.tommasop1804.kutils.classes.measure.RMeasurement
@@ -457,7 +457,7 @@ data class Municipality private constructor(
                 HttpMethod.GET,
                 response.body()
             )
-            val json = JSON(response.body())
+            val json = Json(response.body())
 
             return if (json["address"]!!["postalcode"].isNotNull())
                 ofPostalCode(json["address"]!!["postcode"].asString())

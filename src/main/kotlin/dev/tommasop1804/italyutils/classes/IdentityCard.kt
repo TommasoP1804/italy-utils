@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package dev.tommasop1804.italyutils.classes
 
 import com.fasterxml.jackson.core.JsonGenerator
@@ -5,14 +7,17 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
-import dev.tommasop1804.kutils.*
+import dev.tommasop1804.kutils.LocalDate
 import dev.tommasop1804.kutils.classes.constants.Sex
 import dev.tommasop1804.kutils.classes.geography.Country
+import dev.tommasop1804.kutils.classes.measure.Length
 import dev.tommasop1804.kutils.classes.measure.MeasureUnit
 import dev.tommasop1804.kutils.classes.registry.Contact
+import dev.tommasop1804.kutils.deserialize
 import dev.tommasop1804.kutils.exceptions.ExpectationMismatchException
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.invoke
+import dev.tommasop1804.kutils.toEnumConst
 import tools.jackson.databind.DeserializationContext
 import tools.jackson.databind.SerializationContext
 import tools.jackson.databind.ValueDeserializer
@@ -47,7 +52,6 @@ import java.time.temporal.ChronoUnit
  * @since 2026-02.1
  * @author Tommaso Pastorelli
  */
-@Suppress("unused")
 @JsonSerialize(using = IdentityCard.Companion.Serializer::class)
 @JsonDeserialize(using = IdentityCard.Companion.Deserializer::class)
 @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = IdentityCard.Companion.OldSerializer::class)
@@ -234,3 +238,20 @@ data class IdentityCard(
         }
     }
 }
+
+/**
+ * Type alias for `IdentityCard`, commonly used to simplify
+ * and shorten the reference to the type in the codebase.
+ *
+ * @since 2026-03
+ */
+typealias CIE = IdentityCard
+/**
+ * Represents an alias for the IdentityCard type.
+ *
+ * This typealias can be used interchangeably with IdentityCard to improve code readability
+ * or adapt terminology to specific domain requirements.
+ *
+ * @since 2026-03
+ */
+typealias CartaIdentita = IdentityCard

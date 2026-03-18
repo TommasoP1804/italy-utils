@@ -2,7 +2,8 @@ package dev.tommasop1804.italyutils.annotations
 
 @Target(
     AnnotationTarget.PROPERTY,
-    AnnotationTarget.PROPERTY_GETTER
+    AnnotationTarget.PROPERTY_GETTER,
+    AnnotationTarget.FUNCTION
 )
 @MustBeDocumented
 @Suppress("unused")

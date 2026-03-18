@@ -92,4 +92,25 @@ enum class GeographicDistribution(val italianName: String, val code: Int) {
          */
         infix fun ofCode(code: String) = entries.find { it.code.toString() == code }
     }
+    
+    /**
+     * Provides the `component1` functionality for destructuring declarations.
+     * 
+     * This operator function allows retrieval of the `italianName` property from an instance of the class
+     * in which it is defined. It is typically used in scenarios where destructuring declarations are utilized
+     * to extract individual components of an object.
+     * 
+     * @return The value of the `italianName` property.
+     * @since 2026-03
+     */
+    operator fun component1() = italianName
+    /**
+     * Retrieves the second component of this object when destructuring.
+     *
+     * This method allows destructuring declarations to access the `code` field.
+     *
+     * @return The value of the `code` field.
+     * @since 2026-03
+     */
+    operator fun component2() = code
 }

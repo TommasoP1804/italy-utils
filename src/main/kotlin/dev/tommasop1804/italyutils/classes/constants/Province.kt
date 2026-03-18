@@ -225,8 +225,59 @@ enum class Province(
          */
         @JvmStatic
         infix fun byRegion(region: Number) = entries.filter {
-            it.region == (Region.Companion.ofIstatCode(region)
+            it.region == (Region.ofIstatCode(region)
                 ?: IllegalArgumentException("Region not found.")) && !it.isDeprecated
         }
     }
+
+    /**
+     * Retrieves the `code` property of the `Province` class instance when used in a destructuring declaration.
+     *
+     * This operator function is typically used to extract the `code` field of a `Province` object
+     * as the first component in destructuring syntax.
+     *
+     * @receiver The `Province` instance whose `code` field is being retrieved.
+     * @return The value of the `code` property for the current `Province` instance.
+     * @since 2026-03
+     */
+    operator fun component1() = code
+    /**
+     * Retrieves the second component of the `Province` class for destructuring declarations.
+     *
+     * @return The `displayName` property of the province, which represents the human-readable name.
+     * @since 2026-03
+     */
+    operator fun component2() = displayName
+    /**
+     * Provides the third component of the `Province` data structure.
+     *
+     * This operator function returns the `region` field of the `Province` class,
+     * allowing destructuring declarations to access the region information
+     * in an instance.
+     *
+     * @return The region associated with this province.
+     * @since 2026-03
+     */
+    operator fun component3() = region
+    /**
+     * Retrieves the `isRegionalCapital` property of the `Province` class.
+     * 
+     * This function is used as part of Kotlin's destructuring declarations,
+     * enabling the `isRegionalCapital` property to be accessed directly as
+     * the fourth component in a destructured `Province` object.
+     *
+     * @return The `isRegionalCapital` value of the `Province` instance.
+     * @since 2026-03
+     */
+    operator fun component4() = isRegionalCapital
+    /**
+     * Retrieves the ISTAT code associated with this province.
+     *
+     * This function represents a destructuring component for obtaining
+     * the province's ISTAT code when used in a destructuring declaration.
+     *
+     * @return The ISTAT code of the province.
+     * @since 2026-03
+     */
+    operator fun component5() = istatCode
 }

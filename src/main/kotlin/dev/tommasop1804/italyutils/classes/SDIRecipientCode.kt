@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package dev.tommasop1804.italyutils.classes
 
 import com.fasterxml.jackson.core.JsonGenerator
@@ -36,7 +38,6 @@ import tools.jackson.databind.annotation.JsonSerialize
 @JsonDeserialize(using = PartitaIVA.Companion.Deserializer::class)
 @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = PartitaIVA.Companion.OldSerializer::class)
 @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = PartitaIVA.Companion.OldDeserializer::class)
-@Suppress("unused")
 value class SDIRecipientCode private constructor(private val value: String): CharSequence {
 
     /**
@@ -214,3 +215,19 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      */
     override fun toString() = value
 }
+
+/**
+ * Represents a type alias for the [SDIRecipientCode] class.
+ *
+ * The type alias `CodiceDestinatarioSDI` is used as a simplified terminology for working
+ * with SDI recipient codes in Italian electronic invoicing systems.
+ *
+ * By utilizing this alias, it provides semantic clarity and domain-specific meaning
+ * for contexts where SDI recipient codes are referred to as "Codice Destinatario SDI."
+ *
+ * It ensures that the same validation and behavior are inherited from [SDIRecipientCode].
+ *
+ * @see SDIRecipientCode
+ * @since 2026-03
+ */
+typealias CodiceDestinatarioSDI = SDIRecipientCode
