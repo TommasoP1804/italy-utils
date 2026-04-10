@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import dev.tommasop1804.kutils.LocalDate
+import dev.tommasop1804.kutils.annotations.Beta
 import dev.tommasop1804.kutils.classes.constants.Sex
 import dev.tommasop1804.kutils.classes.geography.Country
 import dev.tommasop1804.kutils.classes.measure.Length
@@ -158,6 +159,7 @@ data class IdentityCard(
         }
 
         class Serializer : ValueSerializer<IdentityCard>() {
+            @OptIn(Beta::class)
             override fun serialize(value: IdentityCard, gen: tools.jackson.core.JsonGenerator, ctxt: SerializationContext) {
                 gen.writeStartObject()
                 gen.writeStringProperty("number", value.number)
@@ -165,7 +167,7 @@ data class IdentityCard(
                 gen.writeStringProperty("name", value.name)
                 gen.writeStringProperty("birthDate", value.birthDate.toString())
                 gen.writeStringProperty("sex", value.sex.name)
-                gen.writeNumberProperty("height", (value.height convertTo MeasureUnit.LengthUnit.METER)().value * 100)
+                gen.writeNumberProperty("height", (value.height convertTo MeasureUnit.LengthUnit.METERS)().value * 100)
                 gen.writeStringProperty("citizenship", value.citizenship.alpha3)
                 gen.writeStringProperty("issueDate", value.issueDate.toString())
                 gen.writeStringProperty("expiryDate", value.expiryDate.toString())
@@ -186,7 +188,7 @@ data class IdentityCard(
                     birthDate = LocalDate(node["birthDate"].asString())(),
                     birthPlace = node["birthPlace"].asString(),
                     sex = node["sex"].asString().toEnumConst(),
-                    height = Length(node["height"].asDouble() / 100, MeasureUnit.LengthUnit.METER),
+                    height = Length(node["height"].asDouble() / 100, MeasureUnit.LengthUnit.METERS),
                     citizenship = (Country ofAlpha3 node["citizenship"].asString())!!,
                     issueDate = LocalDate(node["issueDate"].asString())(),
                     expiryDate = LocalDate(node["expiryDate"].asString())(),
@@ -198,6 +200,7 @@ data class IdentityCard(
         }
 
         class OldSerializer : JsonSerializer<IdentityCard>() {
+            @OptIn(Beta::class)
             override fun serialize(value: IdentityCard, gen: JsonGenerator, serializers: SerializerProvider) {
                 gen.writeStartObject()
                 gen.writeStringField("number", value.number)
@@ -205,7 +208,7 @@ data class IdentityCard(
                 gen.writeStringField("name", value.name)
                 gen.writeStringField("birthDate", value.birthDate.toString())
                 gen.writeStringField("sex", value.sex.name)
-                gen.writeNumberField("height", (value.height convertTo MeasureUnit.LengthUnit.METER)().value * 100)
+                gen.writeNumberField("height", (value.height convertTo MeasureUnit.LengthUnit.METERS)().value * 100)
                 gen.writeStringField("citizenship", value.citizenship.alpha3)
                 gen.writeStringField("issueDate", value.issueDate.toString())
                 gen.writeStringField("expiryDate", value.expiryDate.toString())
@@ -226,7 +229,7 @@ data class IdentityCard(
                     birthDate = LocalDate(node["birthDate"].asText())(),
                     birthPlace = node["birthPlace"].asText(),
                     sex = node["sex"].asText().toEnumConst(),
-                    height = Length(node["height"].asDouble() / 100, MeasureUnit.LengthUnit.METER),
+                    height = Length(node["height"].asDouble() / 100, MeasureUnit.LengthUnit.METERS),
                     citizenship = (Country ofAlpha3 node["citizenship"].asText())!!,
                     issueDate = LocalDate(node["issueDate"].asText())(),
                     expiryDate = LocalDate(node["expiryDate"].asText())(),

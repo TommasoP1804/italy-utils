@@ -1,6 +1,5 @@
 package dev.tommasop1804.italyutils.classes.constants
 
-import dev.tommasop1804.italyutils.classes.constants.Translators.ITALIAN_COUNTRIES_TRANSLATOR
 import dev.tommasop1804.kutils.annotations.CheckTranslationKey
 import dev.tommasop1804.kutils.classes.translators.Translator
 import dev.tommasop1804.kutils.compute
@@ -8,6 +7,7 @@ import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
+@Suppress("unused")
 object Translators {
     /**
      * Provides translations for country names in Italian.

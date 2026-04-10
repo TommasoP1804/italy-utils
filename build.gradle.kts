@@ -7,10 +7,10 @@ plugins {
 }
 
 group = "com.sigeosrl"
-version = "2026-03"
+version = "2026-04"
 // © S.I.GEO s.r.l. | Italy-Utils
 // Referent: Tommaso Pastorelli
-// Last update: Tommaso Pastorelli | 20260318T133502Z
+// Last update: Tommaso Pastorelli | 20260410T103531Z
 
 repositories {
     mavenCentral()
@@ -39,7 +39,7 @@ dependencies {
     implementation("org.aspectj:aspectjweaver:1.9.24")
     implementation("org.slf4j:slf4j-api:2.0.13")
     implementation("org.slf4j:jul-to-slf4j:2.0.13")
-    implementation("dev.tommasop1804:kotlin-utils:3.1.0")
+    implementation("dev.tommasop1804:kotlin-utils:3.5.3")
     implementation("tools.jackson.core:jackson-databind:3.0.2")
     implementation("tools.jackson.core:jackson-core:3.0.2")
     implementation("tools.jackson.module:jackson-module-kotlin:2.20.1")

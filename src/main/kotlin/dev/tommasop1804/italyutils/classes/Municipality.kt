@@ -169,11 +169,11 @@ data class Municipality private constructor(
                             automobilisticCode = row["Sigla automobilistica"]!!,
                             cadastralCode = row["Codice Catastale del comune"]!!,
                             legalPopulation = Year.of(dimensionEntry["Anno Censimento"]!!.toInt()) to dimensionEntry["Popolazione legale"]!!.toLong(),
-                            territorialSurface = Year.of(dimensionEntry["Anno Superficie territoriale"]!!.toInt()) to (dimensionEntry["Superficie territoriale Kmq"]!!.replace(Char.COMMA, Char.DOT).toDouble() ofUnit MeasureUnit.AreaUnit.SQUARE_KILOMETER),
+                            territorialSurface = Year.of(dimensionEntry["Anno Superficie territoriale"]!!.toInt()) to (dimensionEntry["Superficie territoriale Kmq"]!!.replace(Char.COMMA, Char.DOT).toDouble() ofUnit MeasureUnit.AreaUnit.SQUARE_KILOMETERS),
                             residentialPopulation = Year.of(dimensionEntry["Anno Popolazione residente"]!!.toInt()) to (dimensionEntry["Popolazione residente"]!!.toLong()),
                             altimetricZone = caracteristicEntry["Zona altimetrica"]!!.toInt(),
                             altitude = caracteristicEntry["Altitudine metri"]!!.replace(String.DOT, String.EMPTY).run {
-                                if (isEmpty()) null else (toDouble() ofUnit MeasureUnit.LengthUnit.METER)
+                                if (isEmpty()) null else (toDouble() ofUnit MeasureUnit.LengthUnit.METERS)
                             },
                             degurba2011 = caracteristicEntry["Degurba 2011"]!!.toInt(),
                             ecoregionDivisionCode = caracteristicEntry["Codice Ecoregioni Divisioni"]!!,
