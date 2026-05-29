@@ -34,10 +34,10 @@ import tools.jackson.databind.annotation.JsonSerialize
  * @author Tommaso Pastorelli
  */
 @JvmInline
-@JsonSerialize(using = PartitaIVA.Companion.Serializer::class)
-@JsonDeserialize(using = PartitaIVA.Companion.Deserializer::class)
-@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = PartitaIVA.Companion.OldSerializer::class)
-@com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = PartitaIVA.Companion.OldDeserializer::class)
+@JsonSerialize(using = PartitaIva.Companion.Serializer::class)
+@JsonDeserialize(using = PartitaIva.Companion.Deserializer::class)
+@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = PartitaIva.Companion.OldSerializer::class)
+@com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = PartitaIva.Companion.OldDeserializer::class)
 value class SdiRecipientCode private constructor(private val value: String): CharSequence {
 
     /**

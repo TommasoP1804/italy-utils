@@ -6,11 +6,11 @@ plugins {
     signing
 }
 
-group = "com.sigeosrl"
+group = "dev.tommasop1804"
 version = "2026-05"
-// © S.I.GEO s.r.l. | Italy-Utils
-// Referent: Tommaso Pastorelli
-// Last update: Tommaso Pastorelli | 20260529T132818Z
+// Kotlin-Utils
+// Tommaso Pastorelli
+// Last update: Tommaso Pastorelli | 20260529T135726Z
 
 repositories {
     mavenCentral()

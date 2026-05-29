@@ -31,22 +31,22 @@ import tools.jackson.databind.annotation.JsonSerialize
  * @property serialNumber The serial number component of the Partita IVA.
  * @property provincialOfficeCode The code representing the provincial office.
  * @property controlCode The control code component of the Partita IVA.
- * @since 2026-02.1
+ * @since 2026-05
  */
 @JvmInline
-@JsonSerialize(using = PartitaIVA.Companion.Serializer::class)
-@JsonDeserialize(using = PartitaIVA.Companion.Deserializer::class)
-@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = PartitaIVA.Companion.OldSerializer::class)
-@com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = PartitaIVA.Companion.OldDeserializer::class)
+@JsonSerialize(using = PartitaIva.Companion.Serializer::class)
+@JsonDeserialize(using = PartitaIva.Companion.Deserializer::class)
+@com.fasterxml.jackson.databind.annotation.JsonSerialize(using = PartitaIva.Companion.OldSerializer::class)
+@com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = PartitaIva.Companion.OldDeserializer::class)
 @Suppress("unused")
-value class PartitaIVA(private val value: String) : CharSequence {
+value class PartitaIva(private val value: String) : CharSequence {
     /**
      * Represents the length of the value string.
      * This is a read-only property that calculates and returns
      * the current length of the underlying value.
      *
      * @return The number of characters in the value string.
-     * @since 2026-02.1
+     * @since 2026-05
      */
     override val length: Int
         get() = value.length
@@ -58,7 +58,7 @@ value class PartitaIVA(private val value: String) : CharSequence {
      * ends at the seventh character, exclusive of any other content in `value`.
      *
      * @throws IndexOutOfBoundsException if the `value` field contains less than 7 characters.
-     * @since 2026-02.1
+     * @since 2026-05
      */
     val serialNumber: String
         get() = value[0..<7]
@@ -72,7 +72,7 @@ value class PartitaIVA(private val value: String) : CharSequence {
      *
      * @throws IndexOutOfBoundsException if the `value` does not contain sufficient characters to extract
      *         the provincial office code.
-     * @since 2026-02.1
+     * @since 2026-05
      */
     val provincialOfficeCode: String
         get() = value[7..<10]
@@ -84,7 +84,7 @@ value class PartitaIVA(private val value: String) : CharSequence {
      * as a checksum or verification character for validation purposes.
      *
      * @throws NoSuchElementException if the `value` is empty.
-     * @since 2026-02.1
+     * @since 2026-05
      */
     val controlCode: Char
         get() = value.last()
@@ -103,10 +103,10 @@ value class PartitaIVA(private val value: String) : CharSequence {
          *
          * @receiver The string value to validate as a Partita IVA.
          * @return `true` if the string is a valid Partita IVA, `false` otherwise.
-         * @since 2026-02.1
+         * @since 2026-05
          */
         @JvmStatic
-        fun String.isValidPartitaIVA() = runCatching { PartitaIVA(this) }.isSuccess
+        fun String.isValidPartitaIVA() = runCatching { PartitaIva(this) }.isSuccess
 
         /**
          * Attempts to convert the current string into an instance of `PartitaIVA`.
@@ -117,10 +117,10 @@ value class PartitaIVA(private val value: String) : CharSequence {
          *
          * @receiver the string to be converted into a `PartitaIVA` object.
          * @return a [Result] containing the created `PartitaIVA` object or an exception if the operation failed.
-         * @since 2026-02.1
+         * @since 2026-05
          */
         @JvmStatic
-        fun String.toPartitaIVA() = runCatching { PartitaIVA(this) }
+        fun String.toPartitaIVA() = runCatching { PartitaIva(this) }
 
         /**
          * Computes the control code for the provided string value based on a specific algorithm.
@@ -131,7 +131,7 @@ value class PartitaIVA(private val value: String) : CharSequence {
          *
          * @param value the input string from which the control code will be computed
          * @return the computed control code as a character
-         * @since 2026-02.1
+         * @since 2026-05
          */
         @JvmStatic
         fun computeControlCode(value: String): Char {
@@ -151,7 +151,7 @@ value class PartitaIVA(private val value: String) : CharSequence {
          * @param valueWithControlCode The value string containing the control code to be validated.
          *                             It is assumed that the last character represents the control code.
          * @return `true` if the control code is valid based on the calculated checksum, otherwise `false`.
-         * @since 2026-02.1
+         * @since 2026-05
          */
         @JvmStatic
         fun validateControlCode(valueWithControlCode: String): Boolean {
@@ -163,29 +163,29 @@ value class PartitaIVA(private val value: String) : CharSequence {
             return (odd + even).mod(10) == 0
         }
 
-        class Serializer : ValueSerializer<PartitaIVA>() {
-            override fun serialize(value: PartitaIVA, gen: tools.jackson.core.JsonGenerator, ctxt: SerializationContext) {
+        class Serializer : ValueSerializer<PartitaIva>() {
+            override fun serialize(value: PartitaIva, gen: tools.jackson.core.JsonGenerator, ctxt: SerializationContext) {
                 gen.writeString(value.value)
             }
         }
 
-        class Deserializer : ValueDeserializer<PartitaIVA>() {
-            override fun deserialize(p: tools.jackson.core.JsonParser, ctxt: tools.jackson.databind.DeserializationContext) = PartitaIVA(p.string)
+        class Deserializer : ValueDeserializer<PartitaIva>() {
+            override fun deserialize(p: tools.jackson.core.JsonParser, ctxt: tools.jackson.databind.DeserializationContext) = PartitaIva(p.string)
         }
 
-        class OldSerializer : JsonSerializer<PartitaIVA>() {
-            override fun serialize(value: PartitaIVA, gen: JsonGenerator, serializers: SerializerProvider) =
+        class OldSerializer : JsonSerializer<PartitaIva>() {
+            override fun serialize(value: PartitaIva, gen: JsonGenerator, serializers: SerializerProvider) =
                 gen.writeString(value.value)
         }
 
-        class OldDeserializer : JsonDeserializer<PartitaIVA>() {
-            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PartitaIVA = PartitaIVA(p.text)
+        class OldDeserializer : JsonDeserializer<PartitaIva>() {
+            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PartitaIva = PartitaIva(p.text)
         }
 
         @jakarta.persistence.Converter(autoApply = true)
-        class Converter : AttributeConverter<PartitaIVA?, String?> {
-            override fun convertToDatabaseColumn(attribute: PartitaIVA?): String? = attribute?.value
-            override fun convertToEntityAttribute(dbData: String?): PartitaIVA? = dbData?.let { PartitaIVA(it) }
+        class Converter : AttributeConverter<PartitaIva?, String?> {
+            override fun convertToDatabaseColumn(attribute: PartitaIva?): String? = attribute?.value
+            override fun convertToEntityAttribute(dbData: String?): PartitaIva? = dbData?.let { PartitaIva(it) }
         }
     }
 
@@ -195,7 +195,7 @@ value class PartitaIVA(private val value: String) : CharSequence {
      * @param index the position of the desired element.
      * @return the element located at the specified index.
      * @throws IndexOutOfBoundsException if the index is out of range.
-     * @since 2026-02.1
+     * @since 2026-05
      */
     override operator fun get(index: Int) = value[index]
 
@@ -206,7 +206,7 @@ value class PartitaIVA(private val value: String) : CharSequence {
      * @param endIndex the end index of the subsequence, exclusive.
      * @return a new character sequence that is a subsequence of this character sequence.
      * @throws IndexOutOfBoundsException if `startIndex` or `endIndex` is out of range, or if `startIndex > endIndex`.
-     * @since 2026-02.1
+     * @since 2026-05
      */
     override fun subSequence(startIndex: Int, endIndex: Int) = value.subSequence(startIndex, endIndex)
 
@@ -215,7 +215,7 @@ value class PartitaIVA(private val value: String) : CharSequence {
      * This implementation converts the `value` property to uppercase and returns it.
      *
      * @return the uppercase string representation of the `value` property.
-     * @since 2026-02.1
+     * @since 2026-05
      */
     override fun toString() = value
 
