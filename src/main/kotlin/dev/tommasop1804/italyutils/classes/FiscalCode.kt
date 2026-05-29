@@ -140,7 +140,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
      * @since 2026-02.1
      */
     val sex: Sex
-        get() = if (value[9..<11].toInt() > 40) Sex.FEMALE else Sex.MALE
+        get() = if (value[9..<11].toInt() > 40) Sex.Female else Sex.Male
 
     /**
      * Constructs an instance of the `ItalianFiscalCode` class by converting the given [value]
@@ -293,7 +293,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
             })
 
             // DAY
-            if (sex == Sex.FEMALE) code.append((birthDate.dayOfMonth + 40).toString())
+            if (sex == Sex.Female) code.append((birthDate.dayOfMonth + 40).toString())
             else code.append(birthDate.dayOfMonth.toString())
 
             // CITY CODE
@@ -407,7 +407,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
             even2.forEach { counter += it }
             counter += counter2
             counter %= 26
-            var controllo = '0'
+            var controllo: Char
             when (counter) {
                 0 -> controllo = 'A'
                 1 -> controllo = 'B'

@@ -57,7 +57,7 @@ data class DriverLicence(
     val expiryDate: LocalDate,
     val issuingAuthority: String,
     val categories: Set<OwnedCategory>,
-    val codes: StringSet = emptySet()
+    val codes: Set<String> = emptySet()
 ) {
     /**
      * Indicates whether the licence has expired based on the current date.
@@ -83,7 +83,7 @@ data class DriverLicence(
             "The string is not a valid driver's licence number."
         )
         if (!(2(number) == "U1" || Province.entries.map(Province::code).any { it == 2(number) }))
-            log(LogLevel.WARN, "The first two letter is not a current registered province. Check manually validity of driver licence's number.")
+            log(LogLevel.Warn, "The first two letter is not a current registered province. Check manually validity of driver licence's number.")
 
         categories.isNotEmpty() || throw MalformedInputException(
             "At least one driving category must be specified"
@@ -229,63 +229,63 @@ data class DriverLicence(
         /** Mopeds (ciclomotori) - max 45 km/h, max 50cc or 4kW
          * @since 2026-02.1
          */
-        AM(ValidityGroup.STANDARD),
+        AM(ValidityGroup.Standard),
         /** Light motorcycles - max 125cc, max 11kW
          * @since 2026-02.1
          */
-        A1(ValidityGroup.STANDARD),
+        A1(ValidityGroup.Standard),
         /** Medium motorcycles - max 35kW
          * @since 2026-02.1
          */
-        A2(ValidityGroup.STANDARD),
+        A2(ValidityGroup.Standard),
         /** All motorcycles
          * @since 2026-02.1
          */
-        A(ValidityGroup.STANDARD),
+        A(ValidityGroup.Standard),
         /** Light quadricycles - max 400kg, max 15kW
          * @since 2026-02.1
          */
-        B1(ValidityGroup.STANDARD),
+        B1(ValidityGroup.Standard),
         /** Motor vehicles - max 3500kg, max 8+1 passengers
          * @since 2026-02.1
          */
-        B(ValidityGroup.STANDARD),
+        B(ValidityGroup.Standard),
         /** Motor vehicles (B) with trailer - over 750kg
          * @since 2026-02.1
          0*/
-        BE(ValidityGroup.STANDARD),
+        BE(ValidityGroup.Standard),
         /** Medium goods vehicles - 3500-7500kg
          * @since 2026-02.1
          */
-        C1(ValidityGroup.PROFESSIONAL_C),
+        C1(ValidityGroup.ProfessionalC),
         /** Medium goods vehicles (C1) with trailer
          * @since 2026-02.1
          */
-        C1E(ValidityGroup.PROFESSIONAL_C),
+        C1E(ValidityGroup.ProfessionalC),
         /** Large goods vehicles - over 3500kg
          * @since 2026-02.1
          */
-        C(ValidityGroup.PROFESSIONAL_C),
+        C(ValidityGroup.ProfessionalC),
         /** Large goods vehicles (C) with trailer
          * @since 2026-02.1
          */
-        CE(ValidityGroup.PROFESSIONAL_C),
+        CE(ValidityGroup.ProfessionalC),
         /** Minibuses - max 16+1 passengers
          * @since 2026-02.1
          */
-        D1(ValidityGroup.PROFESSIONAL_D),
+        D1(ValidityGroup.ProfessionalD),
         /** Minibuses (D1) with trailer
          * @since 2026-02.1
          */
-        D1E(ValidityGroup.PROFESSIONAL_D),
+        D1E(ValidityGroup.ProfessionalD),
         /** Buses - over 8+1 passengers
          * @since 2026-02.1
          */
-        D(ValidityGroup.PROFESSIONAL_D),
+        D(ValidityGroup.ProfessionalD),
         /** Buses (D) with trailer
          * @since 2026-02.1
          */
-        DE(ValidityGroup.PROFESSIONAL_D);
+        DE(ValidityGroup.ProfessionalD);
 
         companion object {
             /**
@@ -349,23 +349,23 @@ data class DriverLicence(
              * - 50 to 69: 5 years.
              * - 70 to 79: 3 years.
              * - 80 and older: 2 years.
-             * @since 2026-02.1
+             * @since 2026-05
              */
-            STANDARD,
+            Standard,
             /**
              * Professional goods vehicle categories (C1, C1E, C, CE).
              * - Under 65: 5 years.
              * - 65 and older: 2 years.
-             * @since 2026-02.1
+             * @since 2026-05
              */
-            PROFESSIONAL_C,
+            ProfessionalC,
             /**
              * Professional passenger vehicle categories (D1, D1E, D, DE).
              * - Under 60: 5 years.
              * - 60 and older: 1 year.
-             * @since 2026-02.1
+             * @since 2026-05
              */
-            PROFESSIONAL_D;
+            ProfessionalD;
 
             companion object {
                 /**
@@ -401,24 +401,23 @@ data class DriverLicence(
              *
              * @param issueDate The date the licence was issued.
              * @param birthDate The birth date of the individual.
-             * @param category The driving category.
              * @return The calculated expiration date for the given category.
              * @since 2026-02.1
              */
             fun computeExpiration(issueDate: LocalDate, birthDate: LocalDate): LocalDate {
                 val age = birthDate.until(issueDate, ChronoUnit.YEARS)
                 val standard = when (this) {
-                    STANDARD -> when (age) {
+                    Standard -> when (age) {
                         in 0..<50 -> issueDate.plusYears(10)
                         in 50..<70 -> issueDate.plusYears(5)
                         in 70..<80 -> issueDate.plusYears(3)
                         else -> issueDate.plusYears(2)
                     }
-                    PROFESSIONAL_C -> when (age) {
+                    ProfessionalC -> when (age) {
                         in 0..<65 -> issueDate.plusYears(5)
                         else -> issueDate.plusYears(2)
                     }
-                    PROFESSIONAL_D -> when (age) {
+                    ProfessionalD -> when (age) {
                         in 0..<60 -> issueDate.plusYears(5)
                         else -> issueDate.plusYears(1)
                     }
@@ -458,7 +457,6 @@ data class DriverLicence(
          *
          * @param issueDate The date the licence was issued.
          * @param birthDate The birth date of the individual.
-         * @param category The set of driving categories held.
          * @return The calculated expiration date of the licence.
          * @since 2026-02.1
          */

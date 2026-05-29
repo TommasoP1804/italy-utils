@@ -6,8 +6,9 @@ import dev.tommasop1804.italyutils.classes.constants.Region
 import dev.tommasop1804.kutils.*
 import dev.tommasop1804.kutils.classes.coding.Json
 import dev.tommasop1804.kutils.classes.geography.GeoCoordinate
+import dev.tommasop1804.kutils.classes.measure.Area
+import dev.tommasop1804.kutils.classes.measure.Length
 import dev.tommasop1804.kutils.classes.measure.MeasureUnit
-import dev.tommasop1804.kutils.classes.measure.RMeasurement
 import dev.tommasop1804.kutils.classes.measure.RMeasurement.Companion.ofUnit
 import dev.tommasop1804.kutils.classes.web.HttpMethod
 import dev.tommasop1804.kutils.exceptions.HttpRequestException
@@ -87,10 +88,10 @@ data class Municipality private constructor(
     val automobilisticCode: String,
     val cadastralCode: String,
     val legalPopulation: Pair<Year, Long>,
-    val territorialSurface: Pair<Year, RMeasurement<MeasureUnit.AreaUnit>>,
+    val territorialSurface: Pair<Year, Area>,
     val residentialPopulation: Pair<Year, Long>,
     val altimetricZone: Int,
-    val altitude: RMeasurement<MeasureUnit.LengthUnit>? = null,
+    val altitude: Length? = null,
     val degurba2011: Int,
     val ecoregionDivisionCode: String,
     val ecoregionDivision: String,
@@ -100,7 +101,7 @@ data class Municipality private constructor(
     val ecoregionSection: String,
     val ecoregionSubsectionCode: String,
     val ecoregionSubsection: String,
-    val postalCodes: StringList? = null,
+    val postalCodes: List<String>? = null,
     val position: GeoCoordinate? = null,
     val props: DataMap = emptyMap()
 ) {
@@ -116,12 +117,12 @@ data class Municipality private constructor(
          * This property lazily parses the CSV and constructs a list of `Municipality` objects.
          *
          * @throws NoSuchFileException if the resource file is not found.
-         * @since 2026-02.1
+         * @since 2026-05
          */
         @JvmStatic
-        val LIST: List<Municipality>
+        val list: List<Municipality>
             get() {
-                val changeList = CHANGE_LIST.groupBy { it["Codice comune precedente"] ?: String.EMPTY }.mapValues { it.value.first() }
+                val changeList = changeList.groupBy { it["Codice comune precedente"] ?: String.EMPTY }.mapValues { it.value.first() }
                 val municipalities = emptyMList<Municipality>()
 
                 val dimensionsList = getListFromCSV("dimensioni.csv")
@@ -201,10 +202,10 @@ data class Municipality private constructor(
          * A list containing the next change of the dataset.
          * Valid from 2026-01-01T00:00:00+01:00.
          *
-         * @since 2026-02.1
+         * @since 2026-05
          */
         @JvmStatic
-        val CHANGE_LIST: List<StringMap>
+        val changeList: List<StringMap>
             get() {
                 val list = emptyMList<StringMap>()
                 val inputStream = this::class.java.classLoader.getResourceAsStream("change.csv")
@@ -232,8 +233,8 @@ data class Municipality private constructor(
          * @return A list of municipalities that are either capitals, part of a metropolitan area, or free consortia.
          * @since 2026-02.1
          */
-        val CAPITALS_OR_METROPOLITAN_OR_FREE_CONSORTIUM: List<Municipality>
-            get() = LIST.filter { it.isCapitalOrMetropolitanOrFreeConsortium }
+        val capitalsOrMetropolitanOrFreeConsortium: List<Municipality>
+            get() = list.filter { it.isCapitalOrMetropolitanOrFreeConsortium }
 
         /**
          * Finds an item in the `LIST` with a matching name, either in the Italian denomination
@@ -245,7 +246,7 @@ data class Municipality private constructor(
          */
         @JvmStatic
         infix fun ofDenomination(name: String) =
-            LIST.find { it.italianDenomination equalsIgnoreCase name } ?: LIST.find { it.otherLangDenomination?.equalsIgnoreCase(name) ?: false }
+            list.find { it.italianDenomination equalsIgnoreCase name } ?: list.find { it.otherLangDenomination?.equalsIgnoreCase(name) ?: false }
 
         /**
          * Finds a municipality by its progressive identifier.
@@ -255,7 +256,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun ofProgressiveCode(code: String) = LIST.find { it.progressiveCode == code }
+        infix fun ofProgressiveCode(code: String) = list.find { it.progressiveCode == code }
         /**
          * Finds a municipality based on the given progressive number.
          *
@@ -264,7 +265,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun ofProgressiveCode(code: Number) = LIST.find { it.progressiveCode.toInt() == code.toInt() }
+        infix fun ofProgressiveCode(code: Number) = list.find { it.progressiveCode.toInt() == code.toInt() }
 
         /**
          * Finds and returns the first element in the list that matches the provided alphanumeric code,
@@ -274,7 +275,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun ofAlphanumericCode(code: String) = LIST.find { it.alphanumericCode equalsIgnoreCase code }
+        infix fun ofAlphanumericCode(code: String) = list.find { it.alphanumericCode equalsIgnoreCase code }
 
         /**
          * Finds and returns an element from the LIST collection where the numericCode matches the given code.
@@ -284,7 +285,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun ofNumericCode(code: String) = LIST.find { it.numericCode.toInt() == code.toInt() }
+        infix fun ofNumericCode(code: String) = list.find { it.numericCode.toInt() == code.toInt() }
         /**
          * Searches for and retrieves an entry from the LIST based on the provided numeric code.
          *
@@ -292,7 +293,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun ofNumericCode(code: Number) = LIST.find { it.numericCode.toInt() == code.toInt() }
+        infix fun ofNumericCode(code: Number) = list.find { it.numericCode.toInt() == code.toInt() }
 
         /**
          * Searches for a municipality within the list based on its cadastral code.
@@ -302,7 +303,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun ofCadastralCode(code: String) = LIST.find { it.cadastralCode equalsIgnoreCase code}
+        infix fun ofCadastralCode(code: String) = list.find { it.cadastralCode equalsIgnoreCase code}
 
         /**
          * Finds a municipality that contains the specified postal code.
@@ -312,7 +313,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun ofPostalCode(code: String) = LIST.find { it.postalCodes?.contains(code) ?: false }
+        infix fun ofPostalCode(code: String) = list.find { it.postalCodes?.contains(code) ?: false }
 
         /**
          * Finds the first element in a predefined list of municipalities that matches the specified geographical coordinate.
@@ -321,7 +322,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun ofPosition(coordinates: GeoCoordinate) = LIST.find { it.position?.equals(coordinates) ?: false }
+        infix fun ofPosition(coordinates: GeoCoordinate) = list.find { it.position?.equals(coordinates) ?: false }
         /**
          * Finds and returns an item in the list that matches the given geographical coordinates,
          * if available, by comparing its position with the specified latitude and longitude.
@@ -332,7 +333,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        fun ofPosition(latitude: Double, longitude: Double) = LIST.find { it.position?.equals(GeoCoordinate(latitude, longitude)) ?: false }
+        fun ofPosition(latitude: Double, longitude: Double) = list.find { it.position?.equals(GeoCoordinate(latitude, longitude)) ?: false }
 
         /**
          * Filters the list of municipalities to include only those belonging to the specified region.
@@ -341,7 +342,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun byRegion(region: Region) = LIST.filter { it.region == region }
+        infix fun byRegion(region: Region) = list.filter { it.region == region }
 
         /**
          * Filters a list of municipalities by the given supra-municipal territorial unit code.
@@ -351,7 +352,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun bySupraMunicipalTerritorialUnitcode(code: String) = LIST.filter { it.supraMunicipalTerritorialUnitCode == code }
+        infix fun bySupraMunicipalTerritorialUnitcode(code: String) = list.filter { it.supraMunicipalTerritorialUnitCode == code }
         /**
          * Filters the list of municipalities by the specified supra-municipal territorial unit code.
          *
@@ -359,7 +360,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun bySupraMunicipalTerritorialUnitcode(code: Number) = LIST.filter { it.supraMunicipalTerritorialUnitCode.toInt() == code.toInt() }
+        infix fun bySupraMunicipalTerritorialUnitcode(code: Number) = list.filter { it.supraMunicipalTerritorialUnitCode.toInt() == code.toInt() }
 
         /**
          * Filters the list of municipalities by the specified province.
@@ -368,7 +369,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun byProvince(province: Province) = LIST.filter { it.province == province }
+        infix fun byProvince(province: Province) = list.filter { it.province == province }
         /**
          * Filters the list of municipalities by the given province code.
          *
@@ -377,7 +378,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun byProvince(provinceCode: Number) = LIST.filter { it.storicProvinceCode.toInt() == provinceCode.toInt() }
+        infix fun byProvince(provinceCode: Number) = list.filter { it.storicProvinceCode.toInt() == provinceCode.toInt() }
 
         /**
          * Filters a predefined list of entities based on the specified geographical distribution.
@@ -387,7 +388,7 @@ data class Municipality private constructor(
          */
         @JvmStatic
         infix fun byGeographicalDistribution(geographicalDistribution: GeographicDistribution) =
-            LIST.filter { it.geographicalDistribution == geographicalDistribution }
+            list.filter { it.geographicalDistribution == geographicalDistribution }
         /**
          * Filters a list of municipalities based on the provided geographical distribution code.
          *
@@ -396,7 +397,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun byGeographicalDistributionCode(code: String) = LIST.filter { it.geographicalDistributionCode == code }
+        infix fun byGeographicalDistributionCode(code: String) = list.filter { it.geographicalDistributionCode == code }
         /**
          * Filters a list of items by matching the geographical distribution code.
          *
@@ -405,7 +406,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun byGeographicalDistributionCode(code: Number) = LIST.filter { it.geographicalDistributionCode.toInt() == code.toInt() }
+        infix fun byGeographicalDistributionCode(code: Number) = list.filter { it.geographicalDistributionCode.toInt() == code.toInt() }
 
         /**
          * Filters a list of municipalities by the specified automobilistic code.
@@ -415,7 +416,7 @@ data class Municipality private constructor(
          * @since 2026-02.1
          */
         @JvmStatic
-        infix fun byAutomobilisticCode(code: String) = LIST.filter { it.automobilisticCode == code }
+        infix fun byAutomobilisticCode(code: String) = list.filter { it.automobilisticCode == code }
 
         /**
          * Attempts to retrieve a Municipality instance based on the geographic coordinates provided.
@@ -442,7 +443,7 @@ data class Municipality private constructor(
             val request = tryOrThrow({ e: Throwable -> HttpRequestException(
                 500,
                 uri,
-                HttpMethod.GET,
+                HttpMethod.Get,
                 e.message,
             ) }) { HttpRequest.newBuilder()
                 .uri(uri)
@@ -454,16 +455,16 @@ data class Municipality private constructor(
             if (response.statusCode() !in 200..299) throw HttpResponseException(
                 response.statusCode(),
                 uri,
-                HttpMethod.GET,
+                HttpMethod.Get,
                 response.body()
             )
             val json = Json(response.body())
 
             return if (json["address"]!!["postalcode"].isNotNull())
-                ofPostalCode(json["address"]!!["postcode"].asString())
-            else ofDenomination(json["name"]!!.asString()) ?: if (json["address"]!!["town"].isNotNull())
-                ofDenomination(json["address"]!!["town"].asString())
-            else tryOrNull { ofDenomination(json["address"]!!["village"].asString()) }
+                json["address"]!!.getAsNode("postcode")?.asString()?.let(::ofPostalCode)
+            else ofDenomination(json.getAsNode("name")!!.asString()) ?: if (json["address"]!!.getAsNode("town").isNotNull())
+                ofDenomination(json["address"]!!.getAsNode("town")!!.asString())
+            else tryOrNull { ofDenomination(json["address"]!!.getAsNode("village")!!.asString()) }
         }
 
         private fun getListFromCSV(csvName: String): MList<StringMap> {

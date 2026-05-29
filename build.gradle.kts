@@ -7,10 +7,10 @@ plugins {
 }
 
 group = "com.sigeosrl"
-version = "2026-04"
+version = "2026-05"
 // © S.I.GEO s.r.l. | Italy-Utils
 // Referent: Tommaso Pastorelli
-// Last update: Tommaso Pastorelli | 20260410T103531Z
+// Last update: Tommaso Pastorelli | 20260529T132818Z
 
 repositories {
     mavenCentral()
@@ -28,23 +28,20 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.github.lalyos:jfiglet:0.0.8")
     implementation("commons-codec:commons-codec:1.16.0")
-    implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
+    implementation("org.bouncycastle:bcprov-jdk18on:1.84")
     implementation(kotlin("scripting-jsr223"))
     implementation("org.openjdk.nashorn:nashorn-core:15.3")
     implementation("org.aspectj:aspectjrt:1.9.24")
     implementation("org.slf4j:slf4j-api:2.0.13")
-    implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("ch.qos.logback:logback-classic:1.5.32")
     implementation("org.slf4j:jul-to-slf4j:2.0.13")
-    implementation("org.aspectj:aspectjrt:1.9.24")
     implementation("org.aspectj:aspectjweaver:1.9.24")
-    implementation("org.slf4j:slf4j-api:2.0.13")
-    implementation("org.slf4j:jul-to-slf4j:2.0.13")
-    implementation("dev.tommasop1804:kotlin-utils:3.5.3")
-    implementation("tools.jackson.core:jackson-databind:3.0.2")
-    implementation("tools.jackson.core:jackson-core:3.0.2")
-    implementation("tools.jackson.module:jackson-module-kotlin:2.20.1")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.20.1")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.20.1")
+    implementation("dev.tommasop1804:kotlin-utils:4.0.0")
+    implementation("tools.jackson.core:jackson-databind:3.1.1")
+    implementation("tools.jackson.core:jackson-core:3.1.1")
+    implementation("tools.jackson.module:jackson-module-kotlin:2.21.12")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.2")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.21.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.20.1")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
 }

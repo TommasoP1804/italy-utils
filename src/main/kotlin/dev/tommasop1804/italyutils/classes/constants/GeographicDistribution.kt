@@ -19,51 +19,41 @@ enum class GeographicDistribution(val italianName: String, val code: Int) {
      * properties such as an Italian name and a numeric code associated
      * with the specific distribution.
      *
-     * @property italianName The Italian name for the geographic distribution.
-     * @property code The numeric code representing the geographic area.
-     * @since 2026-02.1
+     * @since 2026-05
      */
-    CENTER("Centro", 3),
+    Center("Centro", 3),
     /**
      * Represents the geographical distribution corresponding to the islands of Italy.
      *
-     * @property italianName The Italian name for this distribution.
-     * @property code The numerical code associated with this distribution.
-     * @since 2026-02.1
+     * @since 2026-05
      */
-    ISLANDS("Isole", 5),
+    Islands("Isole", 5),
     /**
      * Represents the north-western geographic distribution within a specific context.
      *
-     * The `NORTH_WEST` region is identified by its Italian name "Nord-ovest" and its numeric code 1.
+     * The `NorthWest` region is identified by its Italian name "Nord-ovest" and its numeric code 1.
      * It is one of the predefined entries in the `GeographicDistribution` enumeration, used for
      * categorizing regions or areas with geographic relevance.
      *
-     * @property italianName The name of the distribution in Italian.
-     * @property code The numeric code associated with the distribution.
-     * @since 2026-02.1
+     * @since 2026-05
      */
-    NORTH_WEST("Nord-ovest", 1),
+    NorthWest("Nord-ovest", 1),
     /**
      * Represents the North-East geographic distribution in Italy.
      * This entry is part of the `GeographicDistribution` enumeration.
      *
-     * @property italianName The Italian name of the geographic area.
-     * @property code The numeric code associated with this geographic area.
-     * @since 2026-02.1
+     * @since 2026-05
      */
-    NORTH_EAST("Nord-est", 2),
+    NorthEast("Nord-est", 2),
     /**
      * Represents the southern geographic distribution in Italy.
      *
      * This entry is part of the `GeographicDistribution` enum and corresponds to the southern region of Italy.
      * It is characterized by the Italian name "Sud" and has a code value of 4.
      *
-     * @property italianName The Italian name for the geographic distribution, specifically "Sud" for this entry.
-     * @property code The numeric code associated with this distribution, which is 4 for the south.
-     * @since 2026-02.1
+     * @since 2026-05
      */
-    SOUTH("Sud", 4);
+    South("Sud", 4);
 
     companion object {
         /**

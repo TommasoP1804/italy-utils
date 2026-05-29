@@ -14,25 +14,13 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.tommasop1804:italy-utils:2026-04")
-}
-```
-
-### Gradle (Groovy)
-
-```groovy
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'dev.tommasop1804:italy-utils:2026-04'
+    implementation("dev.tommasop1804:italy-utils:2026-05")
 }
 ```
 
 ## Documentation
 
-Full documentation will be soon available at: [https://tommasop1804.notion.site/italy-utils](https://tommasop1804.notion.site/italy-utils)
+Full documentation is available at: [https://tommasop1804.notion.site/italy-utils](https://tommasop1804.notion.site/italy-utils)
 
 ## Requirements
 

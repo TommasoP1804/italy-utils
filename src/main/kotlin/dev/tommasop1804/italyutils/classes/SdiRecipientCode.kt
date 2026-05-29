@@ -30,7 +30,7 @@ import tools.jackson.databind.annotation.JsonSerialize
  * @property length The length of the SDI recipient code.
  * @throws MalformedInputException If the SDI recipient code does not meet the required format or pattern.
  * @constructor Creates an SDIRecipientCode from the given string after validation.
- * @since 2026-02.1
+ * @since 2026-05
  * @author Tommaso Pastorelli
  */
 @JvmInline
@@ -38,7 +38,7 @@ import tools.jackson.databind.annotation.JsonSerialize
 @JsonDeserialize(using = PartitaIVA.Companion.Deserializer::class)
 @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = PartitaIVA.Companion.OldSerializer::class)
 @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = PartitaIVA.Companion.OldDeserializer::class)
-value class SDIRecipientCode private constructor(private val value: String): CharSequence {
+value class SdiRecipientCode private constructor(private val value: String): CharSequence {
 
     /**
      * Provides the length of the `SDIRecipientCode` value.
@@ -47,7 +47,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      * The length will always be 6 or 7, as per the validation rules for SDI recipient codes.
      *
      * @return The length of the SDI recipient code.
-     * @since 2026-02.1
+     * @since 2026-05
      */
     override val length: Int
         get() = value.length
@@ -61,7 +61,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      * Used to differentiate between public administration and private recipient codes based on
      * their length.
      *
-     * @since 2026-02.1
+     * @since 2026-05
      */
     val isPA
         get() = value.length == 6
@@ -70,17 +70,17 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      * A recipient code is considered private if its length is exactly 7 characters.
      *
      * @return `true` if the code represents a private recipient, `false` otherwise.
-     * @since 2026-02.1
+     * @since 2026-05
      */
     val isPrivate
         get() = value.length == 7
 
     /**
-     * Constructs an instance of [SDIRecipientCode] from the provided character sequence.
+     * Constructs an instance of [SdiRecipientCode] from the provided character sequence.
      * 
      * @param code The character sequence representing the SDI recipient code.
      * @throws MalformedInputException If the input string is not a valid SDI recipient code.
-     * @since 2026-02.1
+     * @since 2026-05
      */
     constructor(code: CharSequence) : this(+code.toString())
 
@@ -101,7 +101,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
          * - Length: 6 or 7 characters.
          * - Characters: Uppercase letters (A-Z) and digits (0-9) only.
          *
-         * @since 2026-02.1
+         * @since 2026-05
          */
         @JvmStatic
         val PATTERN = Regex("^[A-Z0-9]{6,7}$")
@@ -112,20 +112,20 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
          *
          * The value of this code is "0000000", which conforms to the expected format for private recipient codes.
          *
-         * @since 2026-02.1
+         * @since 2026-05
          */
         @JvmStatic
-        val GENERIC_PRIVATE = SDIRecipientCode("0000000")
+        val GENERIC_PRIVATE = SdiRecipientCode("0000000")
         /**
          * Represents the predefined SDI recipient code for foreign entities.
          * This constant signifies the special SDI recipient code "XXXXXXX"
          * often used in contexts where the recipient is a foreign organization or entity
          * and does not fall under typical PA (Public Administration) or private entity constraints.
          *
-         * @since 2026-02.1
+         * @since 2026-05
          */
         @JvmStatic
-        val FOREIGN = SDIRecipientCode("XXXXXXX")
+        val FOREIGN = SdiRecipientCode("XXXXXXX")
 
         /**
          * Validates whether the given input is a valid SDI recipient code.
@@ -136,49 +136,49 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
          *
          * @param code The input sequence to validate as an SDI recipient code.
          * @return `true` if the input is a valid SDI recipient code, otherwise `false`.
-         * @since 2026-02.1
+         * @since 2026-05
          */
         @JvmStatic
-        fun isValidSDIRecipientCode(code: CharSequence) = runCatching { SDIRecipientCode(code) }.isSuccess
+        fun isValidSDIRecipientCode(code: CharSequence) = runCatching { SdiRecipientCode(code) }.isSuccess
         /**
-         * Attempts to convert the receiving [CharSequence] to an instance of [SDIRecipientCode].
+         * Attempts to convert the receiving [CharSequence] to an instance of [SdiRecipientCode].
          *
          * This function validates whether the [CharSequence] adheres to the format required for an SDI recipient code.
          * Depending on the length and structure of the provided [CharSequence], it will determine if it can represent
          * a valid code. The result of the conversion is encapsulated within a [Result] object.
          *
-         * @return A [Result] containing the successfully created [SDIRecipientCode], or a failure if the 
+         * @return A [Result] containing the successfully created [SdiRecipientCode], or a failure if the
          *         validation or conversion fails.
          * @receiver The input [CharSequence] to be evaluated as an SDI recipient code.
          *
-         * @since 2026-02.1
+         * @since 2026-05
          */
         @JvmStatic
-        fun CharSequence.toSDIRecipientCode() = runCatching { SDIRecipientCode(this) }
+        fun CharSequence.toSDIRecipientCode() = runCatching { SdiRecipientCode(this) }
 
-        class Serializer : ValueSerializer<SDIRecipientCode>() {
-            override fun serialize(value: SDIRecipientCode, gen: tools.jackson.core.JsonGenerator, ctxt: SerializationContext) {
+        class Serializer : ValueSerializer<SdiRecipientCode>() {
+            override fun serialize(value: SdiRecipientCode, gen: tools.jackson.core.JsonGenerator, ctxt: SerializationContext) {
                 gen.writeString(value.value)
             }
         }
 
-        class Deserializer : ValueDeserializer<SDIRecipientCode>() {
-            override fun deserialize(p: tools.jackson.core.JsonParser, ctxt: tools.jackson.databind.DeserializationContext) = SDIRecipientCode(p.string)
+        class Deserializer : ValueDeserializer<SdiRecipientCode>() {
+            override fun deserialize(p: tools.jackson.core.JsonParser, ctxt: tools.jackson.databind.DeserializationContext) = SdiRecipientCode(p.string)
         }
 
-        class OldSerializer : JsonSerializer<SDIRecipientCode>() {
-            override fun serialize(value: SDIRecipientCode, gen: JsonGenerator, serializers: SerializerProvider) =
+        class OldSerializer : JsonSerializer<SdiRecipientCode>() {
+            override fun serialize(value: SdiRecipientCode, gen: JsonGenerator, serializers: SerializerProvider) =
                 gen.writeString(value.value)
         }
 
-        class OldDeserializer : JsonDeserializer<SDIRecipientCode>() {
-            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): SDIRecipientCode = SDIRecipientCode(p.text)
+        class OldDeserializer : JsonDeserializer<SdiRecipientCode>() {
+            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): SdiRecipientCode = SdiRecipientCode(p.text)
         }
 
         @jakarta.persistence.Converter(autoApply = true)
-        class Converter : AttributeConverter<SDIRecipientCode?, String?> {
-            override fun convertToDatabaseColumn(attribute: SDIRecipientCode?): String? = attribute?.value
-            override fun convertToEntityAttribute(dbData: String?): SDIRecipientCode? = dbData?.let { SDIRecipientCode(it) }
+        class Converter : AttributeConverter<SdiRecipientCode?, String?> {
+            override fun convertToDatabaseColumn(attribute: SdiRecipientCode?): String? = attribute?.value
+            override fun convertToEntityAttribute(dbData: String?): SdiRecipientCode? = dbData?.let { SdiRecipientCode(it) }
         }
     }
 
@@ -188,7 +188,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      * @param index the index of the character to return, must be within the bounds of the string.
      * @return the character at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >= length).
-     * @since 2026-02.1
+     * @since 2026-05
      */
     override fun get(index: Int) = value[index]
 
@@ -202,7 +202,7 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      * bounds of this sequence and not less than `startIndex`.
      * @return the specified subsequence as a new character sequence.
      * @throws IndexOutOfBoundsException if `startIndex` or `endIndex` are out of bounds.
-     * @since 2026-02.1
+     * @since 2026-05
      */
     override fun subSequence(startIndex: Int, endIndex: Int) = value.subSequence(startIndex, endIndex)
 
@@ -211,13 +211,13 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
      * This representation is based on the underlying value of the object.
      *
      * @return a string equivalent to the value representation of this object.
-     * @since 2026-02.1
+     * @since 2026-05
      */
     override fun toString() = value
 }
 
 /**
- * Represents a type alias for the [SDIRecipientCode] class.
+ * Represents a type alias for the [SdiRecipientCode] class.
  *
  * The type alias `CodiceDestinatarioSDI` is used as a simplified terminology for working
  * with SDI recipient codes in Italian electronic invoicing systems.
@@ -225,9 +225,9 @@ value class SDIRecipientCode private constructor(private val value: String): Cha
  * By utilizing this alias, it provides semantic clarity and domain-specific meaning
  * for contexts where SDI recipient codes are referred to as "Codice Destinatario SDI."
  *
- * It ensures that the same validation and behavior are inherited from [SDIRecipientCode].
+ * It ensures that the same validation and behavior are inherited from [SdiRecipientCode].
  *
- * @see SDIRecipientCode
- * @since 2026-03
+ * @see SdiRecipientCode
+ * @since 2026-05
  */
-typealias CodiceDestinatarioSDI = SDIRecipientCode
+typealias CodiceDestinatarioSdi = SdiRecipientCode
