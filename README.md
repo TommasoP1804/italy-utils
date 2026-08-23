@@ -1,7 +1,7 @@
 # Italy-Utils
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.3.20-blue.svg)](https://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.4.0-blue.svg)](https://kotlinlang.org)
 [![JDK](https://img.shields.io/badge/JDK-21-orange.svg)](https://openjdk.org)
 
 ## Installation
@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.tommasop1804:italy-utils:2026-05")
+    implementation("dev.tommasop1804:italy-utils:2026-08")
 }
 ```
 
@@ -25,7 +25,7 @@ Full documentation is available at: [https://tommasop1804.notion.site/italy-util
 ## Requirements
 
 - JDK 21+
-- Kotlin 2.3.20+
+- Kotlin 2.4.0+
 
 ## License
 

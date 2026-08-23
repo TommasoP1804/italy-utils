@@ -80,7 +80,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
     @UnreliableYear
     val birthDate: LocalDate
         get() = LocalDate.of(
-            (Year.now().toString()[0..<2].toInt() - if (value[6..<8].toInt() > (-2)(Year.now().toString()).toInt()) 1 else 0) * 100 + value[6..<8].toInt(),
+            (Year.now().toString()[0..<2].toInt() - if (value[6..<8].toInt() > Year.now().toString().drop(2).toInt()) 1 else 0) * 100 + value[6..<8].toInt(),
             when (value[8]) {
                 'A' -> Month.JANUARY
                 'B' -> Month.FEBRUARY
@@ -160,9 +160,10 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
             "The string is not a valid Italian fiscal code"
         )
 
-        value.last().expect(computeControlLetter(value.dropLast(1))) {
-            "The string is not a valid Italian fiscal code. Check the Control character."
-        }
+        value.last().expect(
+            computeControlLetter(value.dropLast(1)),
+            lazyMessage = { "The string is not a valid Italian fiscal code. Check the Control character." }
+        )
     }
 
     companion object {
@@ -274,7 +275,7 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
             }
 
             // YEAR
-            code.append((-2)(birthDate.year.toString()))
+            code.append(birthDate.year.toString().drop(2))
 
             // MONTH
             code.append(when (birthDate.month) {

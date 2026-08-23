@@ -45,7 +45,7 @@ val TemporalAccessor.italianHoliday: String2?
             MonthDay(12, 26) -> "Santo Stefano" to "St Stephen"
             else -> null
         }
-        if (constants.isNotNull()) return constants
+        if (constants.isNotNull) return constants
         if (date == MonthDay(10, 4) && year >= 2026) return "San Francesco d'Assisi" to "St Francis of Assisi"
 
         fun getEasterDate(year: Int): MonthDay {
@@ -85,4 +85,4 @@ val TemporalAccessor.italianHoliday: String2?
  * @since 2026-02.1
  */
 val TemporalAccessor.isItalianHoliday: Boolean
-    get() = italianHoliday.isNotNull()
+    get() = italianHoliday.isNotNull

@@ -460,9 +460,9 @@ data class Municipality private constructor(
             )
             val json = Json(response.body())
 
-            return if (json["address"]!!["postalcode"].isNotNull())
+            return if (json["address"]!!["postalcode"].isNotNull)
                 json["address"]!!.getAsNode("postcode")?.asString()?.let(::ofPostalCode)
-            else ofDenomination(json.getAsNode("name")!!.asString()) ?: if (json["address"]!!.getAsNode("town").isNotNull())
+            else ofDenomination(json.getAsNode("name")!!.asString()) ?: if (json["address"]!!.getAsNode("town").isNotNull)
                 ofDenomination(json["address"]!!.getAsNode("town")!!.asString())
             else tryOrNull { ofDenomination(json["address"]!!.getAsNode("village")!!.asString()) }
         }

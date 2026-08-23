@@ -137,8 +137,8 @@ value class PartitaIva(private val value: String) : CharSequence {
         fun computeControlCode(value: String): Char {
             value.matches(Regex("^[0-9]{10}$")) || throw MalformedInputException("The string is not a valid part of Italian Partita IVA")
 
-            val odd = 5(value.filterIndexed { index, _ -> index.isEven }).sumOf(Char::digitToInt)
-            val even = 5(value.filterIndexed { index, _ -> index.isOdd }).sumOf {
+            val odd = value.filterIndexed { index, _ -> index.isEven }.take(5).sumOf(Char::digitToInt)
+            val even = value.filterIndexed { index, _ -> index.isOdd }.take(5).sumOf {
                 val twice = it.digitToInt() * 2
                 if (twice > 9) twice - 9 else twice
             }
@@ -155,8 +155,8 @@ value class PartitaIva(private val value: String) : CharSequence {
          */
         @JvmStatic
         fun validateControlCode(valueWithControlCode: String): Boolean {
-            val odd = 5(valueWithControlCode.filterIndexed { index, _ -> index.isEven }).sumOf(Char::digitToInt) + valueWithControlCode.last().digitToInt()
-            val even = 5(valueWithControlCode.filterIndexed { index, _ -> index.isOdd }).sumOf {
+            val odd = valueWithControlCode.filterIndexed { index, _ -> index.isEven }.take(5).sumOf(Char::digitToInt) + valueWithControlCode.last().digitToInt()
+            val even = valueWithControlCode.filterIndexed { index, _ -> index.isOdd }.take(5).sumOf {
                 val twice = it.digitToInt() * 2
                 if (twice > 9) twice - 9 else twice
             }

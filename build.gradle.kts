@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.3.20"
+    id("org.jetbrains.kotlin.jvm") version "2.4.0"
     id("maven-publish")
     id("io.freefair.aspectj.post-compile-weaving") version "9.1.0" // AspectJ plugin
     id("com.vanniktech.maven.publish") version "0.30.0"
@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "dev.tommasop1804"
-version = "2026-05"
+version = "2026-08"
 // Kotlin-Utils
 // Tommaso Pastorelli
 // Last update: Tommaso Pastorelli | 20260529T135726Z
@@ -24,7 +24,7 @@ dependencies {
     implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
     implementation("org.locationtech.jts:jts-core:1.19.0")
     implementation("org.locationtech.jts.io:jts-io-common:1.19.0")
-    implementation("org.hibernate:hibernate-spatial:6.6.0.Final")
+    implementation("org.hibernate.orm:hibernate-spatial:7.4.2.Final")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.github.lalyos:jfiglet:0.0.8")
     implementation("commons-codec:commons-codec:1.16.0")
@@ -36,7 +36,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.5.32")
     implementation("org.slf4j:jul-to-slf4j:2.0.13")
     implementation("org.aspectj:aspectjweaver:1.9.24")
-    implementation("dev.tommasop1804:kotlin-utils:4.0.0")
+    implementation("dev.tommasop1804:kotlin-utils:5.0.0")
     implementation("tools.jackson.core:jackson-databind:3.1.1")
     implementation("tools.jackson.core:jackson-core:3.1.1")
     implementation("tools.jackson.module:jackson-module-kotlin:2.21.12")
@@ -49,9 +49,20 @@ dependencies {
 kotlin {
     jvmToolchain(21)
     compilerOptions {
-        freeCompilerArgs.add("-Xcontext-parameters")
-        freeCompilerArgs.add("-Xname-based-destructuring=complete")
+        freeCompilerArgs.addAll(
+            "-Xjsr305=strict",
+            "-Xcollection-literals",
+            "-Xallow-returns-result-of",
+            "-Xreturn-value-checker=check",
+            "-Xname-based-destructuring=complete",
+            "-Xexplicit-context-arguments"
+        )
     }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 tasks.withType<Test> {

@@ -82,7 +82,7 @@ data class DriverLicence(
         LICENCE_NUMBER_REGEX(number) || throw MalformedInputException(
             "The string is not a valid driver's licence number."
         )
-        if (!(2(number) == "U1" || Province.entries.map(Province::code).any { it == 2(number) }))
+        if (!(number.take(2) == "U1" || Province.entries.map(Province::code).any { it == number.take(2) }))
             log(LogLevel.Warn, "The first two letter is not a current registered province. Check manually validity of driver licence's number.")
 
         categories.isNotEmpty() || throw MalformedInputException(
