@@ -1,6 +1,7 @@
 package dev.tommasop1804.italyutils.classes.constants
 
 import dev.tommasop1804.kutils.equalsIgnoreCase
+import org.jetbrains.exposed.v1.core.Table
 
 /**
  * Represents the geographical distribution of an area within a predefined set of regions or distributions.
@@ -81,6 +82,19 @@ enum class GeographicDistribution(val italianName: String, val code: Int) {
          * @since 2026-02.1
          */
         infix fun ofCode(code: String) = entries.find { it.code.toString() == code }
+
+        /**
+         * Save a geographic distribution for the specified name in a table.
+         * The save can either be performed by matching the name exactly or not,
+         * based on the value of the `byName` parameter.
+         *
+         * @param name The name of the column.
+         * @param byName A flag indicating whether the save should match the name exactly.
+         *               Defaults to true, meaning the save is performed by name.
+         * @since 2026-09
+         */
+        fun Table.italianGeographicDistribution(name: String, byName: Boolean = true) =
+            if (byName) enumerationByName<GeographicDistribution>(name, 9) else enumeration<GeographicDistribution>(name)
     }
     
     /**

@@ -2,6 +2,7 @@ package dev.tommasop1804.italyutils.classes.constants
 
 import dev.tommasop1804.kutils.String2
 import dev.tommasop1804.kutils.equalsIgnoreCase
+import org.jetbrains.exposed.v1.core.Table
 
 /**
  * Represents geographical regions, each associated with a display name
@@ -133,6 +134,20 @@ enum class Region(
          */
         @JvmStatic
         infix fun fromProvince(provinceCode: String) = (Province.ofCode(provinceCode))?.region
+
+        /**
+         * Provides a way to associate a table column with an Italian region in the dataset.
+         *
+         * This method allows binding a column in the table to a `Region` enumeration,
+         * either by its name or using its ordered index.
+         *
+         * @param name The name of the column to be associated with the Region enumeration.
+         * @param byName If true, associates the column with the Region enumeration by name.
+         * Otherwise, associates it by index. Defaults to true.
+         * @since 2026-09
+         */
+        fun Table.italianRegion(name: String, byName: Boolean = true) =
+            if (byName) enumerationByName<Region>(name, 19) else enumeration<Region>(name)
     }
 
     /**

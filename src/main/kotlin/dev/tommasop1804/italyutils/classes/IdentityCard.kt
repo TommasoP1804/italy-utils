@@ -18,7 +18,9 @@ import dev.tommasop1804.kutils.deserialize
 import dev.tommasop1804.kutils.exceptions.ExpectationMismatchException
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.invoke
+import dev.tommasop1804.kutils.jsonb
 import dev.tommasop1804.kutils.toEnumConst
+import org.jetbrains.exposed.v1.core.Table
 import tools.jackson.databind.DeserializationContext
 import tools.jackson.databind.SerializationContext
 import tools.jackson.databind.ValueDeserializer
@@ -239,6 +241,14 @@ data class IdentityCard(
                 )
             }
         }
+
+        /**
+         * Maps the specified column in the database table to the `IdentityCard` JSONB type.
+         *
+         * @param name The name of the database column that stores the identity card data in JSONB format.
+         * @since 2026-09
+         */
+        fun Table.italianIdentityCard(name: String) = jsonb<IdentityCard>(name)
     }
 }
 

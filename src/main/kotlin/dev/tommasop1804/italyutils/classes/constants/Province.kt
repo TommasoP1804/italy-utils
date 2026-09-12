@@ -1,7 +1,9 @@
 package dev.tommasop1804.italyutils.classes.constants
 
 import dev.tommasop1804.kutils.equalsIgnoreCase
+import dev.tommasop1804.kutils.exceptions.NoSuchEntryException
 import dev.tommasop1804.kutils.tryOr
+import org.jetbrains.exposed.v1.core.Table
 
 /**
  * Represents a province in Italy, defined by various attributes including its code, display name, region,
@@ -228,6 +230,33 @@ enum class Province(
             it.region == (Region.ofIstatCode(region)
                 ?: IllegalArgumentException("Region not found.")) && !it.isDeprecated
         }
+
+        /**
+         * Adds a custom column to the table to represent an Italian province.
+         *
+         * The column can either store the province as an enumerated value using its name
+         * or by ordinal. The column is defined with a maximum length of 30 characters.
+         *
+         * @param name The name of the column to be added to the table.
+         * @param byName Indicates whether the column should use the province's name
+         *               (default is true). If false, the ordinal of the province is used instead.
+         * @since 2026-09
+         */
+        fun Table.italianProvince(name: String, byName: Boolean = true) =
+            if (byName) enumerationByName<Province>(name, 30) else enumeration<Province>(name)
+        /**
+         * Defines a table column for storing or retrieving an Italian province code.
+         *
+         * This method creates a 2-character column in the table mapped to a province code.
+         * The transformation logic converts the stored province code into a `Province` instance
+         * or throws an exception if the code does not match any existing province.
+         *
+         * @param name The name of the column in the table. This specifies the title for the province code column
+         * in the data model or database schema.
+         * @since 2026-09
+         */
+        fun Table.italianProvinceCode(name: String) = char(name, 2)
+            .transform({ ofCode(it) ?: throw NoSuchEntryException(Province::class, it) }, Province::code)
     }
 
     /**

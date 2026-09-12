@@ -9,10 +9,10 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import dev.tommasop1804.kutils.exceptions.ExpectationMismatchException
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.get
-import dev.tommasop1804.kutils.invoke
 import dev.tommasop1804.kutils.isEven
 import dev.tommasop1804.kutils.isOdd
 import jakarta.persistence.AttributeConverter
+import org.jetbrains.exposed.v1.core.Table
 import tools.jackson.databind.SerializationContext
 import tools.jackson.databind.ValueDeserializer
 import tools.jackson.databind.ValueSerializer
@@ -187,6 +187,17 @@ value class PartitaIva(private val value: String) : CharSequence {
             override fun convertToDatabaseColumn(attribute: PartitaIva?): String? = attribute?.value
             override fun convertToEntityAttribute(dbData: String?): PartitaIva? = dbData?.let { PartitaIva(it) }
         }
+
+        /**
+         * Defines a column in the database table for storing Partita IVA, a specific tax identification number
+         * used in Italy for business entities. The column is defined as a character type with a fixed length of 11
+         * and includes transformations to and from the `PartitaIva` class.
+         *
+         * @param name the name of the column to be added to the table.
+         * @since 2026-09
+         */
+        fun Table.partitaIva(name: String) = char(name, 11)
+            .transform(::PartitaIva, PartitaIva::toString)
     }
 
     /**

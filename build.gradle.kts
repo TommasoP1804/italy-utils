@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.4.0"
+    id("org.jetbrains.kotlin.jvm") version "2.4.20"
     id("maven-publish")
     id("io.freefair.aspectj.post-compile-weaving") version "9.1.0" // AspectJ plugin
     id("com.vanniktech.maven.publish") version "0.30.0"
@@ -7,10 +7,10 @@ plugins {
 }
 
 group = "dev.tommasop1804"
-version = "2026-08"
+version = "2026-09"
 // Kotlin-Utils
 // Tommaso Pastorelli
-// Last update: Tommaso Pastorelli | 20260529T135726Z
+// Last update: Tommaso Pastorelli | 20260912T105330Z
 
 repositories {
     mavenCentral()
@@ -25,6 +25,9 @@ dependencies {
     implementation("org.locationtech.jts:jts-core:1.19.0")
     implementation("org.locationtech.jts.io:jts-io-common:1.19.0")
     implementation("org.hibernate.orm:hibernate-spatial:7.4.2.Final")
+    implementation("org.jetbrains.exposed:exposed-core:1.5.0")
+    implementation("org.jetbrains.exposed:exposed-dao:1.5.0")
+    implementation("org.jetbrains.exposed:exposed-jdbc:1.5.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.github.lalyos:jfiglet:0.0.8")
     implementation("commons-codec:commons-codec:1.16.0")
@@ -36,7 +39,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.5.32")
     implementation("org.slf4j:jul-to-slf4j:2.0.13")
     implementation("org.aspectj:aspectjweaver:1.9.24")
-    implementation("dev.tommasop1804:kotlin-utils:5.0.0")
+    implementation("dev.tommasop1804:kotlin-utils:5.5.0")
     implementation("tools.jackson.core:jackson-databind:3.1.1")
     implementation("tools.jackson.core:jackson-core:3.1.1")
     implementation("tools.jackson.module:jackson-module-kotlin:2.21.12")

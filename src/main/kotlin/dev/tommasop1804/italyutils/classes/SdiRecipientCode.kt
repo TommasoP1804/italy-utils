@@ -12,6 +12,7 @@ import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.invoke
 import dev.tommasop1804.kutils.unaryPlus
 import jakarta.persistence.AttributeConverter
+import org.jetbrains.exposed.v1.core.Table
 import tools.jackson.databind.SerializationContext
 import tools.jackson.databind.ValueDeserializer
 import tools.jackson.databind.ValueSerializer
@@ -136,10 +137,10 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
          *
          * @param code The input sequence to validate as an SDI recipient code.
          * @return `true` if the input is a valid SDI recipient code, otherwise `false`.
-         * @since 2026-05
+         * @since 2026-09
          */
         @JvmStatic
-        fun isValidSDIRecipientCode(code: CharSequence) = runCatching { SdiRecipientCode(code) }.isSuccess
+        fun isValidSdiRecipientCode(code: CharSequence) = runCatching { SdiRecipientCode(code) }.isSuccess
         /**
          * Attempts to convert the receiving [CharSequence] to an instance of [SdiRecipientCode].
          *
@@ -151,10 +152,10 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
          *         validation or conversion fails.
          * @receiver The input [CharSequence] to be evaluated as an SDI recipient code.
          *
-         * @since 2026-05
+         * @since 2026-09
          */
         @JvmStatic
-        fun CharSequence.toSDIRecipientCode() = runCatching { SdiRecipientCode(this) }
+        fun CharSequence.toSdiRecipientCode() = runCatching { SdiRecipientCode(this) }
 
         class Serializer : ValueSerializer<SdiRecipientCode>() {
             override fun serialize(value: SdiRecipientCode, gen: tools.jackson.core.JsonGenerator, ctxt: SerializationContext) {
@@ -180,6 +181,17 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
             override fun convertToDatabaseColumn(attribute: SdiRecipientCode?): String? = attribute?.value
             override fun convertToEntityAttribute(dbData: String?): SdiRecipientCode? = dbData?.let { SdiRecipientCode(it) }
         }
+
+        /**
+         * Adds a column to the table for storing SDI recipient codes. The column has a fixed length of 7
+         * and applies a transformation to map the database value to an instance of `SdiRecipientCode`
+         * and vice versa.
+         *
+         * @param name the name of the column in the database table.
+         * @since 2026-09
+         */
+        fun Table.sdiRecipientCode(name: String) = varchar(name, 7)
+            .transform(::SdiRecipientCode, SdiRecipientCode::toString)
     }
 
     /**

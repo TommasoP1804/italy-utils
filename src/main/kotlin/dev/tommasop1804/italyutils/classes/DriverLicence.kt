@@ -11,6 +11,7 @@ import dev.tommasop1804.italyutils.classes.constants.Province
 import dev.tommasop1804.kutils.*
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.exceptions.ValidationFailedException
+import org.jetbrains.exposed.v1.core.Table
 import tools.jackson.databind.DeserializationContext
 import tools.jackson.databind.SerializationContext
 import tools.jackson.databind.ValueDeserializer
@@ -215,6 +216,14 @@ data class DriverLicence(
                 )
             }
         }
+
+        /**
+         * Maps the specified column of a database table to the DriverLicence type, allowing for JSONB serialization.
+         *
+         * @param name the name of the column that stores the driver's license information in JSONB format
+         * @since 2026-09
+         */
+        fun Table.italianDriverLicence(name: String) = jsonb<DriverLicence>(name)
     }
 
     /**
@@ -307,6 +316,18 @@ data class DriverLicence(
              */
             @JvmStatic
             infix fun byValidityGroup(group: ValidityGroup) = entries.filter { it.validityGroup == group }
+
+            /**
+             * Maps a column in the database table to the Italian driver's license category enumeration.
+             * The mapping can be performed either by name or by ordinal value.
+             *
+             * @param name The name of the column in the database table to be associated with the driver license category.
+             * @param byName A flag indicating whether the mapping is based on the name of the enumeration constant (`true`)
+             *        or its ordinal value (`false`). Defaults to `true`.
+             * @since 2026-09
+             */
+            fun Table.italianDriverLicenceCategory(name: String, byName: Boolean = true) =
+                if (byName) enumerationByName<Category>(name, 3) else enumeration<Category>(name)
         }
 
         /**
@@ -377,6 +398,17 @@ data class DriverLicence(
                  */
                 @JvmStatic
                 infix fun fromCategory(category: Category) = category.validityGroup
+
+                /**
+                 * Defines the configuration for mapping a database column to the validity group enumeration
+                 * used in the Italian driver's licence validity system.
+                 *
+                 * @param name The name of the database column to be mapped.
+                 * @param byName If true, maps the column by enumeration name; otherwise, maps by ordinal value. Default is true.
+                 * @since 2026-09
+                 */
+                fun Table.italianDriverLicenceValidityGroup(name: String, byName: Boolean = true) =
+                    if (byName) enumerationByName<ValidityGroup>(name, 13) else enumeration<ValidityGroup>(name)
             }
 
             /**

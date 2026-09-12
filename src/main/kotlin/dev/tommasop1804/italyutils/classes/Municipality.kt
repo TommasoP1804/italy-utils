@@ -13,6 +13,7 @@ import dev.tommasop1804.kutils.classes.measure.RMeasurement.Companion.ofUnit
 import dev.tommasop1804.kutils.classes.web.HttpMethod
 import dev.tommasop1804.kutils.exceptions.HttpRequestException
 import dev.tommasop1804.kutils.exceptions.HttpResponseException
+import org.jetbrains.exposed.v1.core.Table
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URI
@@ -482,5 +483,18 @@ data class Municipality private constructor(
             }
             return list
         }
+
+        /**
+         * Defines a column in a database table representing an Italian municipality code.
+         * The code is expected to be a 6-character alphanumeric value. A transformation is applied
+         * to find the corresponding municipality or throw an exception if no match is found.
+         *
+         * @param name The name of the column that represents the Italian municipality code in the table.
+         * @since 2026-09
+         */
+        fun Table.italianMunicipalityCode(name: String) = char(name, 6).transform(
+            { ofAlphanumericCode(it) ?: throw NoSuchElementException("No municipality found for code: $it") },
+            Municipality::alphanumericCode
+        )
     }
 }

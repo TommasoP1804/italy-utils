@@ -14,6 +14,7 @@ import dev.tommasop1804.kutils.classes.constants.Sex
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.exceptions.ValidationFailedException
 import jakarta.persistence.AttributeConverter
+import org.jetbrains.exposed.v1.core.Table
 import tools.jackson.databind.SerializationContext
 import tools.jackson.databind.ValueDeserializer
 import tools.jackson.databind.ValueSerializer
@@ -465,6 +466,17 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
             override fun convertToDatabaseColumn(attribute: FiscalCode?): String? = attribute?.value
             override fun convertToEntityAttribute(dbData: String?): FiscalCode? = dbData?.let { FiscalCode(it) }
         }
+
+        /**
+         * Adds a column to the table to represent an Italian fiscal code.
+         * The fiscal code is stored as a 16-character string and is transformed
+         * back and forth between the `FiscalCode` object and its string representation.
+         *
+         * @param name The name of the column in the table.
+         * @since 2026-09
+         */
+        fun Table.italianFiscalCode(name: String) = char(name, 16)
+            .transform(::FiscalCode, FiscalCode::toString)
     }
 
     /**
