@@ -6,6 +6,11 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
+import dev.tommasop1804.kutils.classes.functional.Either
+import dev.tommasop1804.kutils.classes.functional.catching
+import dev.tommasop1804.kutils.classes.functional.either
+import dev.tommasop1804.kutils.classes.functional.raise
+import dev.tommasop1804.kutils.errors.InvalidTypeFormat
 import dev.tommasop1804.kutils.exceptions.ExpectationMismatchException
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.get
@@ -18,6 +23,7 @@ import tools.jackson.databind.ValueDeserializer
 import tools.jackson.databind.ValueSerializer
 import tools.jackson.databind.annotation.JsonDeserialize
 import tools.jackson.databind.annotation.JsonSerialize
+import kotlin.reflect.typeOf
 
 /**
  * Represents a Partita IVA (Italian VAT identification number) and provides functionality
@@ -103,46 +109,52 @@ value class PartitaIva(private val value: String) : CharSequence {
          *
          * @receiver The string value to validate as a Partita IVA.
          * @return `true` if the string is a valid Partita IVA, `false` otherwise.
-         * @since 2026-05
+         * @since 2026-09.1
          */
         @JvmStatic
-        fun String.isValidPartitaIVA() = runCatching { PartitaIva(this) }.isSuccess
+        fun String.isValidPartitaIva() = runCatching { PartitaIva(this) }.isSuccess
 
         /**
-         * Attempts to convert the current string into an instance of `PartitaIVA`.
+         * Converts the string receiver into a `PartitaIva` object, if valid.
          *
-         * This extension function tries to create a `PartitaIVA` object using the current string
-         * as input. The operation is wrapped in a `Result` to handle potential exceptions
-         * that might occur during the instantiation process.
-         *
-         * @receiver the string to be converted into a `PartitaIVA` object.
-         * @return a [Result] containing the created `PartitaIVA` object or an exception if the operation failed.
-         * @since 2026-05
+         * @return an `Either` instance containing a `PartitaIva` object if the conversion is successful,
+         * or an `InvalidTypeFormat` error if the string is improperly formatted or contains invalid data.
+         * @since 2026-09.1
          */
         @JvmStatic
-        fun String.toPartitaIVA() = runCatching { PartitaIva(this) }
+        fun String.toPartitaIva(): Either<InvalidTypeFormat, PartitaIva> = either {
+            catching({ PartitaIva(this@toPartitaIva) }) { e: Exception ->
+                InvalidTypeFormat(this@toPartitaIva, typeOf<PartitaIva>(), e)
+            }
+        }
 
         /**
-         * Computes the control code for the provided string value based on a specific algorithm.
+         * Computes the control code for a given value using specific calculations based on its structure.
          *
-         * The control code is determined by processing the characters of the string in alternating
-         * positions (odd and even indices) to calculate separate sums, combining them, and deriving
-         * a single character as the control code.
+         * The method ensures the input value conforms to a valid format, calculates the sum of digits
+         * at odd and even positions (based on specific computational rules), and derives the control code.
          *
-         * @param value the input string from which the control code will be computed
-         * @return the computed control code as a character
-         * @since 2026-05
+         * @param value a string representing a 10-digit sequence to compute the control code for.
+         *              It must follow the format of an Italian Partita IVA.
+         * @return an `Either` type which is either:
+         *         - `InvalidTypeFormat` if the input does not meet the required format.
+         *         - A `Char` representing the computed control code for the input value.
+         * @since 2026-09.1
          */
         @JvmStatic
-        fun computeControlCode(value: String): Char {
-            value.matches(Regex("^[0-9]{10}$")) || throw MalformedInputException("The string is not a valid part of Italian Partita IVA")
+        fun computeControlCode(value: String): Either<InvalidTypeFormat, Char> = either {
+            value.matches(Regex("^[0-9]{10}$")) || raise(InvalidTypeFormat(
+                value,
+                typeOf<PartitaIva>(),
+                "The string is not a valid part of Italian Partita IVA"
+            ))
 
             val odd = value.filterIndexed { index, _ -> index.isEven }.take(5).sumOf(Char::digitToInt)
             val even = value.filterIndexed { index, _ -> index.isOdd }.take(5).sumOf {
                 val twice = it.digitToInt() * 2
                 if (twice > 9) twice - 9 else twice
             }
-            return (10 - (odd + even).mod(10)).mod(10).digitToChar()
+            (10 - (odd + even).mod(10)).mod(10).digitToChar()
         }
 
         /**

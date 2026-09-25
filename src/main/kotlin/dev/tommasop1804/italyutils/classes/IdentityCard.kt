@@ -7,19 +7,16 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
-import dev.tommasop1804.kutils.LocalDate
+import dev.tommasop1804.kutils.*
 import dev.tommasop1804.kutils.annotations.Beta
 import dev.tommasop1804.kutils.classes.constants.Sex
 import dev.tommasop1804.kutils.classes.geography.Country
 import dev.tommasop1804.kutils.classes.measure.Length
 import dev.tommasop1804.kutils.classes.measure.MeasureUnit
 import dev.tommasop1804.kutils.classes.registry.Contact
-import dev.tommasop1804.kutils.deserialize
 import dev.tommasop1804.kutils.exceptions.ExpectationMismatchException
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.invoke
-import dev.tommasop1804.kutils.jsonb
-import dev.tommasop1804.kutils.toEnumConst
 import org.jetbrains.exposed.v1.core.Table
 import tools.jackson.databind.DeserializationContext
 import tools.jackson.databind.SerializationContext
@@ -187,13 +184,13 @@ data class IdentityCard(
                     number = node["number"].asString(),
                     surname = node["surname"].asString(),
                     name = node["name"].asString(),
-                    birthDate = LocalDate(node["birthDate"].asString())(),
+                    birthDate = LocalDate(node["birthDate"].asString()),
                     birthPlace = node["birthPlace"].asString(),
                     sex = node["sex"].asString().toEnumConst(),
                     height = Length(node["height"].asDouble() / 100, MeasureUnit.LengthUnit.METERS),
                     citizenship = (Country ofAlpha3 node["citizenship"].asString())!!,
-                    issueDate = LocalDate(node["issueDate"].asString())(),
-                    expiryDate = LocalDate(node["expiryDate"].asString())(),
+                    issueDate = LocalDate(node["issueDate"].asString()),
+                    expiryDate = LocalDate(node["expiryDate"].asString()),
                     issuingMunicipality = node["issuingMunicipality"].asString(),
                     fiscalCode = FiscalCode(node["fiscalCode"].asString()),
                     residentialAddress = node["residentialAddress"].traverse(p.objectReadContext()).readValueAs(Contact.Address::class.java)
@@ -228,13 +225,13 @@ data class IdentityCard(
                     number = node["number"].asText(),
                     surname = node["surname"].asText(),
                     name = node["name"].asText(),
-                    birthDate = LocalDate(node["birthDate"].asText())(),
+                    birthDate = LocalDate(node["birthDate"].asText()),
                     birthPlace = node["birthPlace"].asText(),
                     sex = node["sex"].asText().toEnumConst(),
                     height = Length(node["height"].asDouble() / 100, MeasureUnit.LengthUnit.METERS),
                     citizenship = (Country ofAlpha3 node["citizenship"].asText())!!,
-                    issueDate = LocalDate(node["issueDate"].asText())(),
-                    expiryDate = LocalDate(node["expiryDate"].asText())(),
+                    issueDate = LocalDate(node["issueDate"].asText()),
+                    expiryDate = LocalDate(node["expiryDate"].asText()),
                     issuingMunicipality = node["issuingMunicipality"].asText(),
                     fiscalCode = FiscalCode(node["fiscalCode"].asText()),
                     residentialAddress = node["residentialAddress"].asText().deserialize<Contact.Address>()()

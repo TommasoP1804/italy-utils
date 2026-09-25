@@ -8,6 +8,10 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
+import dev.tommasop1804.kutils.classes.functional.Either
+import dev.tommasop1804.kutils.classes.functional.catching
+import dev.tommasop1804.kutils.classes.functional.either
+import dev.tommasop1804.kutils.errors.InvalidTypeFormat
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.invoke
 import dev.tommasop1804.kutils.unaryPlus
@@ -18,6 +22,7 @@ import tools.jackson.databind.ValueDeserializer
 import tools.jackson.databind.ValueSerializer
 import tools.jackson.databind.annotation.JsonDeserialize
 import tools.jackson.databind.annotation.JsonSerialize
+import kotlin.reflect.typeOf
 
 /**
  * Represents an SDI (Sistema di Interscambio) recipient code used in electronic invoicing systems in Italy.
@@ -31,7 +36,7 @@ import tools.jackson.databind.annotation.JsonSerialize
  * @property length The length of the SDI recipient code.
  * @throws MalformedInputException If the SDI recipient code does not meet the required format or pattern.
  * @constructor Creates an SDIRecipientCode from the given string after validation.
- * @since 2026-05
+ * @since 2026.05
  * @author Tommaso Pastorelli
  */
 @JvmInline
@@ -48,7 +53,7 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
      * The length will always be 6 or 7, as per the validation rules for SDI recipient codes.
      *
      * @return The length of the SDI recipient code.
-     * @since 2026-05
+     * @since 2026.05
      */
     override val length: Int
         get() = value.length
@@ -62,7 +67,7 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
      * Used to differentiate between public administration and private recipient codes based on
      * their length.
      *
-     * @since 2026-05
+     * @since 2026.05
      */
     val isPA
         get() = value.length == 6
@@ -71,7 +76,7 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
      * A recipient code is considered private if its length is exactly 7 characters.
      *
      * @return `true` if the code represents a private recipient, `false` otherwise.
-     * @since 2026-05
+     * @since 2026.05
      */
     val isPrivate
         get() = value.length == 7
@@ -81,7 +86,7 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
      * 
      * @param code The character sequence representing the SDI recipient code.
      * @throws MalformedInputException If the input string is not a valid SDI recipient code.
-     * @since 2026-05
+     * @since 2026.05
      */
     constructor(code: CharSequence) : this(+code.toString())
 
@@ -102,7 +107,7 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
          * - Length: 6 or 7 characters.
          * - Characters: Uppercase letters (A-Z) and digits (0-9) only.
          *
-         * @since 2026-05
+         * @since 2026.05
          */
         @JvmStatic
         val PATTERN = Regex("^[A-Z0-9]{6,7}$")
@@ -113,7 +118,7 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
          *
          * The value of this code is "0000000", which conforms to the expected format for private recipient codes.
          *
-         * @since 2026-05
+         * @since 2026.05
          */
         @JvmStatic
         val GENERIC_PRIVATE = SdiRecipientCode("0000000")
@@ -123,7 +128,7 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
          * often used in contexts where the recipient is a foreign organization or entity
          * and does not fall under typical PA (Public Administration) or private entity constraints.
          *
-         * @since 2026-05
+         * @since 2026.05
          */
         @JvmStatic
         val FOREIGN = SdiRecipientCode("XXXXXXX")
@@ -135,27 +140,25 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
          * defined in the `SDIRecipientCode` rules, which enforce specific length 
          * and pattern requirements.
          *
-         * @param code The input sequence to validate as an SDI recipient code.
+         * @receiver The input sequence to validate as an SDI recipient code.
          * @return `true` if the input is a valid SDI recipient code, otherwise `false`.
-         * @since 2026-09
+         * @since 2026-09.1
          */
         @JvmStatic
-        fun isValidSdiRecipientCode(code: CharSequence) = runCatching { SdiRecipientCode(code) }.isSuccess
+        fun CharSequence.isValidSdiRecipientCode() = runCatching { SdiRecipientCode(this) }.isSuccess
         /**
-         * Attempts to convert the receiving [CharSequence] to an instance of [SdiRecipientCode].
+         * Attempts to convert a [CharSequence] into an instance of [SdiRecipientCode].
+         * If the conversion fails due to invalid format, returns an [InvalidTypeFormat] error.
          *
-         * This function validates whether the [CharSequence] adheres to the format required for an SDI recipient code.
-         * Depending on the length and structure of the provided [CharSequence], it will determine if it can represent
-         * a valid code. The result of the conversion is encapsulated within a [Result] object.
-         *
-         * @return A [Result] containing the successfully created [SdiRecipientCode], or a failure if the
-         *         validation or conversion fails.
-         * @receiver The input [CharSequence] to be evaluated as an SDI recipient code.
-         *
-         * @since 2026-09
+         * @return Either an error of type [InvalidTypeFormat] or a successfully created [SdiRecipientCode] instance.
+         * @since 2026-09.1
          */
         @JvmStatic
-        fun CharSequence.toSdiRecipientCode() = runCatching { SdiRecipientCode(this) }
+        fun CharSequence.toSdiRecipientCode(): Either<InvalidTypeFormat, SdiRecipientCode> = either {
+            catching({ SdiRecipientCode(this@toSdiRecipientCode) }) { e: Exception ->
+                InvalidTypeFormat(this@toSdiRecipientCode, typeOf<SdiRecipientCode>(), e)
+            }
+        }
 
         class Serializer : ValueSerializer<SdiRecipientCode>() {
             override fun serialize(value: SdiRecipientCode, gen: tools.jackson.core.JsonGenerator, ctxt: SerializationContext) {
@@ -200,7 +203,7 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
      * @param index the index of the character to return, must be within the bounds of the string.
      * @return the character at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >= length).
-     * @since 2026-05
+     * @since 2026.05
      */
     override fun get(index: Int) = value[index]
 
@@ -214,7 +217,7 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
      * bounds of this sequence and not less than `startIndex`.
      * @return the specified subsequence as a new character sequence.
      * @throws IndexOutOfBoundsException if `startIndex` or `endIndex` are out of bounds.
-     * @since 2026-05
+     * @since 2026.05
      */
     override fun subSequence(startIndex: Int, endIndex: Int) = value.subSequence(startIndex, endIndex)
 
@@ -223,7 +226,7 @@ value class SdiRecipientCode private constructor(private val value: String): Cha
      * This representation is based on the underlying value of the object.
      *
      * @return a string equivalent to the value representation of this object.
-     * @since 2026-05
+     * @since 2026.05
      */
     override fun toString() = value
 }

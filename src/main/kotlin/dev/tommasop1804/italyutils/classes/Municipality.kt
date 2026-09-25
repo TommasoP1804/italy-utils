@@ -5,14 +5,19 @@ import dev.tommasop1804.italyutils.classes.constants.Province
 import dev.tommasop1804.italyutils.classes.constants.Region
 import dev.tommasop1804.kutils.*
 import dev.tommasop1804.kutils.classes.coding.Json
+import dev.tommasop1804.kutils.classes.functional.Either
+import dev.tommasop1804.kutils.classes.functional.either
+import dev.tommasop1804.kutils.classes.functional.raise
 import dev.tommasop1804.kutils.classes.geography.GeoCoordinate
 import dev.tommasop1804.kutils.classes.measure.Area
 import dev.tommasop1804.kutils.classes.measure.Length
 import dev.tommasop1804.kutils.classes.measure.MeasureUnit
 import dev.tommasop1804.kutils.classes.measure.RMeasurement.Companion.ofUnit
+import dev.tommasop1804.kutils.classes.web.HttpHeader.Companion.USER_AGENT
+import dev.tommasop1804.kutils.classes.web.HttpHeaders
 import dev.tommasop1804.kutils.classes.web.HttpMethod
-import dev.tommasop1804.kutils.exceptions.HttpRequestException
-import dev.tommasop1804.kutils.exceptions.HttpResponseException
+import dev.tommasop1804.kutils.errors.HttpError
+import dev.tommasop1804.kutils.errors.Uncomputable
 import org.jetbrains.exposed.v1.core.Table
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -420,19 +425,19 @@ data class Municipality private constructor(
         infix fun byAutomobilisticCode(code: String) = list.filter { it.automobilisticCode == code }
 
         /**
-         * Attempts to retrieve a Municipality instance based on the geographic coordinates provided.
-         * The method uses the Nominatim OpenStreetMap API to fetch location-related data and then
-         * tries to match the municipality either by postal code or the town name (denomination).
+         * Attempts to retrieve a Municipality object using geocoordinates by querying the OpenStreetMap API.
          *
-         * @param coordinates the geographic coordinates used to determine the municipality.
-         * @throws HttpRequestException if there's an issue with the HTTP request.
-         * @throws HttpResponseException if the HTTP response status code indicates an error.
-         * @return the Municipality instance matching the given geographic coordinates,
-         *         or null if no matching municipality is found.
-         * @since 2026-02.1
+         * Possible errors:
+         * - [HttpError.RequestError] - An error occurred while making the HTTP request.
+         * - [HttpError.ResponseError] - An error occurred while fetching data from OpenStreetMap.
+         * - [Uncomputable] - If the municipality cannot be determined from the provided coordinates.
+         *
+         * @param coordinates the geographical coordinates (latitude and longitude) to reverse geocode.
+         * @return an [Either] containing the Municipality if successful, or an [Error] if the process fails.
+         * @since 2026-09.1
          */
         @JvmStatic
-        infix fun fromCoordinates(coordinates: GeoCoordinate): Municipality? {
+        infix fun fromCoordinates(coordinates: GeoCoordinate): Either<Error, Municipality> = either {
             val url = String.format(
                 "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=%f&lon=%f&zoom=10&addressdetails=1",
                 coordinates.latitude,
@@ -441,31 +446,36 @@ data class Municipality private constructor(
 
             val uri = URI.create(url)
             val client: HttpClient = HttpClient.newHttpClient()
-            val request = tryOrThrow({ e: Throwable -> HttpRequestException(
+            val request = tryOrRaise({ e: Throwable -> HttpError.RequestError(
+                "OpenStreetMap",
                 500,
                 uri,
                 HttpMethod.Get,
-                e.message,
+                requestHeaders = HttpHeaders(USER_AGENT to "SIGEO_srl-Italy-Utils/1.0"),
+                errorMessage = e.message
             ) }) { HttpRequest.newBuilder()
                 .uri(uri)
-                .header("User-Agent", "SIGEO_srl-Italy-Utils/1.0") // Required by Nominatim
+                .header(USER_AGENT, "SIGEO_srl-Italy-Utils/1.0") // Required by Nominatim
                 .build()
             }
 
             val response: HttpResponse<String> = client.send(request, HttpResponse.BodyHandlers.ofString())
-            if (response.statusCode() !in 200..299) throw HttpResponseException(
+            if (response.statusCode() !in 200..299) raise(HttpError.ResponseError(
+                "OpenStreetMap",
                 response.statusCode(),
                 uri,
                 HttpMethod.Get,
-                response.body()
-            )
+                requestHeaders = HttpHeaders(USER_AGENT to "SIGEO_srl-Italy-Utils/1.0"),
+                responseBody = response.body()
+            ))
             val json = Json(response.body())
 
-            return if (json["address"]!!["postalcode"].isNotNull)
+            (if (json["address"]!!["postalcode"].isNotNull)
                 json["address"]!!.getAsNode("postcode")?.asString()?.let(::ofPostalCode)
             else ofDenomination(json.getAsNode("name")!!.asString()) ?: if (json["address"]!!.getAsNode("town").isNotNull)
                 ofDenomination(json["address"]!!.getAsNode("town")!!.asString())
-            else tryOrNull { ofDenomination(json["address"]!!.getAsNode("village")!!.asString()) }
+            else tryOrNull { ofDenomination(json["address"]!!.getAsNode("village")!!.asString()) })
+                ?: raise(Uncomputable())
         }
 
         private fun getListFromCSV(csvName: String): MList<StringMap> {

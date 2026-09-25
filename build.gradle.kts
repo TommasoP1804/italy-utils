@@ -7,10 +7,10 @@ plugins {
 }
 
 group = "dev.tommasop1804"
-version = "2026-09"
+version = "2026-09.2"
 // Kotlin-Utils
 // Tommaso Pastorelli
-// Last update: Tommaso Pastorelli | 20260912T105330Z
+// Last update: Tommaso Pastorelli | 20260925T152500Z
 
 repositories {
     mavenCentral()
@@ -39,7 +39,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.5.32")
     implementation("org.slf4j:jul-to-slf4j:2.0.13")
     implementation("org.aspectj:aspectjweaver:1.9.24")
-    implementation("dev.tommasop1804:kotlin-utils:5.5.0")
+    implementation("dev.tommasop1804:kotlin-utils:6.2.0")
     implementation("tools.jackson.core:jackson-databind:3.1.1")
     implementation("tools.jackson.core:jackson-core:3.1.1")
     implementation("tools.jackson.module:jackson-module-kotlin:2.21.12")

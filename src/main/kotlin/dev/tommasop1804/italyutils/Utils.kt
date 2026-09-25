@@ -20,7 +20,7 @@ import java.time.temporal.TemporalAccessor
  * for Easter and Easter Monday for a given year. If the date matches a holiday, it returns
  * the name of the holiday in both Italian and English.
  *
- * It's possible that there's more than one Italian name. In that case, you can separate them with [com.sigeosrl.utils.splitAndTrim]
+ * It's possible that there's more than one Italian name. In that case, you can separate them with [dev.tommasop1804.utils.splitAndTrim]
  * using the '/' character.
  *
  * @return A `String2` representing the holiday name in Italian (first) and English (second), or `null` if

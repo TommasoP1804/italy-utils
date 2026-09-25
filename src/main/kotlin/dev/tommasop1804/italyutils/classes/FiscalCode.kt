@@ -11,8 +11,14 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import dev.tommasop1804.italyutils.annotations.UnreliableYear
 import dev.tommasop1804.kutils.*
 import dev.tommasop1804.kutils.classes.constants.Sex
+import dev.tommasop1804.kutils.classes.functional.Either
+import dev.tommasop1804.kutils.classes.functional.catching
+import dev.tommasop1804.kutils.classes.functional.either
+import dev.tommasop1804.kutils.classes.functional.ensure
+import dev.tommasop1804.kutils.errors.InvalidFormat
+import dev.tommasop1804.kutils.errors.InvalidTypeFormat
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
-import dev.tommasop1804.kutils.exceptions.ValidationFailedException
+import dev.tommasop1804.kutils.get
 import jakarta.persistence.AttributeConverter
 import org.jetbrains.exposed.v1.core.Table
 import tools.jackson.databind.SerializationContext
@@ -23,6 +29,8 @@ import tools.jackson.databind.annotation.JsonSerialize
 import java.time.LocalDate
 import java.time.Month
 import java.time.Year
+import kotlin.reflect.typeOf
+import kotlin.text.iterator
 
 /**
  * Represents an Italian fiscal code (Codice Fiscale).
@@ -161,10 +169,9 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
             "The string is not a valid Italian fiscal code"
         )
 
-        value.last().expect(
-            computeControlLetter(value.dropLast(1)),
-            lazyMessage = { "The string is not a valid Italian fiscal code. Check the Control character." }
-        )
+        value.last().expect(computeControlLetter(value.dropLast(1)), lazyMessage = {
+            "The string is not a valid Italian fiscal code. Check the Control character."
+        })
     }
 
     companion object {
@@ -183,41 +190,49 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
         fun String.isValidItalianFiscalCode() = runCatching { FiscalCode(this) }.isSuccess
 
         /**
-         * Converts the current string instance to an instance of `FiscalCode`.
+         * Converts the current string into an Italian Fiscal Code representation.
          *
-         * This method attempts to create an `FiscalCode` object using the string
-         * on which it is called. The conversion operation is wrapped in a `Result` object
-         * for safe handling of potential exceptions. If the conversion is successful,
-         * the resulting `FiscalCode` instance is encapsulated in a successful `Result`.
-         * If an error occurs during conversion (e.g., invalid input format or other constraints),
-         * the resulting `Result` will be a failure containing the thrown exception.
+         * The operation attempts to transform the string into an instance of the `FiscalCode` class.
+         * If the conversion is successful, the result is wrapped in an `Either.Right`. In case of a format
+         * error or any exception during the process, an `InvalidTypeFormat` error is returned, wrapped
+         * in an `Either.Left`.
          *
-         * @receiver The string to be converted into an `FiscalCode`.
-         * @return A `Result` containing either the successfully created `FiscalCode` instance
-         *         or the exception encountered during the conversion process.
-         * @since 2026-02.1
+         * @return An `Either` containing a `FiscalCode` instance on successful conversion, or
+         * an `InvalidFormatOfType` on failure.
+         * @since 2026-09.1
          */
         @JvmStatic
-        fun String.toItalianFiscalCode() = runCatching { FiscalCode(this) }
+        fun String.toItalianFiscalCode(): Either<InvalidTypeFormat, FiscalCode> = either {
+            catching({ FiscalCode(this@toItalianFiscalCode) }) { e: Exception ->
+                InvalidTypeFormat(this@toItalianFiscalCode, typeOf<FiscalCode>(), e)
+            }
+        }
 
         /**
-         * Computes a unique alphanumeric code based on the provided personal details, following the Italian Fiscal Code model.
+         * Computes a fiscal code based on personal and location-related information.
          *
-         * @param lastName The last name of the individual. Must only contain alphabetic characters.
-         * @param name The first name of the individual. Must only contain alphabetic characters.
-         * @param birthDate The birth date of the individual.
-         * @param sex The sex of the individual, either male or female.
-         * @param cityCode A four-character city code. The first character must be an uppercase letter, followed by three digits.
-         * @return A computed alphanumeric code derived from the provided details, wrapped in a [Result].
-         * @throws ValidationFailedException If the input values do not meet the required conditions.
-         * @since 2026-02.1
+         * @param lastName the last name of the individual; must contain only alphabetic characters.
+         * @param name the first name of the individual; must contain only alphabetic characters.
+         * @param birthDate the date of birth of the individual.
+         * @param sex the sex of the individual, either Male or Female.
+         * @param cityCode the code representing the municipality of birth; must match the format `AXXX`, where `A` is a letter and `XXX` are digits.
+         * @return an `Either` instance that contains the `FiscalCode` if the computation is successful, or `InvalidFormat` if any validation errors occur.
+         * @since 2026-09.1
          */
         @JvmStatic
-        fun compute(lastName: String, name: String, birthDate: LocalDate, sex: Sex, cityCode: String) = runCatching {
-            validate(lastName.isAlphabetic) { "The last name must be an alphabetic character" }
-            validate(name.isAlphabetic) { "The name must be an alphabetic character" }
-            validate((+cityCode).matches(Regex("^[A-Z][0-9]{3}$"))) { "The city code must be an alphanumeric character as AXXX" }
-            validate(cityCode.length == 4) { "The city code must be 3 characters long" }
+        fun compute(lastName: String, name: String, birthDate: LocalDate, sex: Sex, cityCode: String): Either<InvalidFormat, FiscalCode> = either {
+            ensure(lastName.isAlphabetic) {
+                InvalidFormat(lastName, "Last name", "The last name must be an alphabetic character")
+            }
+            ensure(name.isAlphabetic) {
+                InvalidFormat(name, "Name", "The name must be an alphabetic character")
+            }
+            ensure((+cityCode).matches(Regex("^[A-Z][0-9]{3}$"))) {
+                InvalidFormat(cityCode, "City code", "The city code must be an alphanumeric character as AXXX")
+            }
+            ensure(cityCode.length == 4) {
+                InvalidFormat(cityCode, "City code", "The city code must be 3 characters long")
+            }
 
             val code = kotlin.text.StringBuilder("")
 
@@ -305,7 +320,9 @@ value class FiscalCode private constructor(private val value: String) : CharSequ
             val controllo = computeControlLetter(code.toString())
             if (!controllo.isLetter()) throw kotlin.RuntimeException("Unexpected error")
             code.append(controllo)
-            FiscalCode(+code.toString())
+            catching({ FiscalCode(+code.toString()) }) { e: Exception ->
+                InvalidTypeFormat(code.toString(), typeOf<FiscalCode>(), e)
+            }
         }
 
         /**

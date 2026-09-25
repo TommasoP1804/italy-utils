@@ -11,6 +11,7 @@ import dev.tommasop1804.italyutils.classes.constants.Province
 import dev.tommasop1804.kutils.*
 import dev.tommasop1804.kutils.exceptions.MalformedInputException
 import dev.tommasop1804.kutils.exceptions.ValidationFailedException
+import dev.tommasop1804.kutils.invoke
 import org.jetbrains.exposed.v1.core.Table
 import tools.jackson.databind.DeserializationContext
 import tools.jackson.databind.SerializationContext
@@ -160,10 +161,10 @@ data class DriverLicence(
                     number = node["number"].asString(),
                     surname = node["surname"].asString(),
                     name = node["name"].asString(),
-                    birthDate = LocalDate(node["birthDate"].asString())(),
+                    birthDate = LocalDate(node["birthDate"].asString()),
                     birthPlace = node["birthPlace"].asString(),
-                    issueDate = LocalDate(node["issueDate"].asString())(),
-                    expiryDate = LocalDate(node["expiryDate"].asString())(),
+                    issueDate = LocalDate(node["issueDate"].asString()),
+                    expiryDate = LocalDate(node["expiryDate"].asString()),
                     issuingAuthority = node["issuingAuthority"].asString(),
                     categories = buildSet {
                         val arr = node["categories"]
@@ -202,10 +203,10 @@ data class DriverLicence(
                     number = node["number"].asText(),
                     surname = node["surname"].asText(),
                     name = node["name"].asText(),
-                    birthDate = LocalDate(node["birthDate"].asText())(),
+                    birthDate = LocalDate(node["birthDate"].asText()),
                     birthPlace = node["birthPlace"].asText(),
-                    issueDate = LocalDate(node["issueDate"].asText())(),
-                    expiryDate = LocalDate(node["expiryDate"].asText())(),
+                    issueDate = LocalDate(node["issueDate"].asText()),
+                    expiryDate = LocalDate(node["expiryDate"].asText()),
                     issuingAuthority = node["issuingAuthority"].asText(),
                     categories = buildSet {
                         val arr = node["categories"]
