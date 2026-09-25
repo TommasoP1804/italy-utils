@@ -16,6 +16,7 @@ import dev.tommasop1804.kutils.classes.measure.RMeasurement.Companion.ofUnit
 import dev.tommasop1804.kutils.classes.web.HttpHeader.Companion.USER_AGENT
 import dev.tommasop1804.kutils.classes.web.HttpHeaders
 import dev.tommasop1804.kutils.classes.web.HttpMethod
+import dev.tommasop1804.kutils.errors.Error
 import dev.tommasop1804.kutils.errors.HttpError
 import dev.tommasop1804.kutils.errors.Uncomputable
 import org.jetbrains.exposed.v1.core.Table
